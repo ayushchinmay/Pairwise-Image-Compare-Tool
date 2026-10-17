@@ -1,0 +1,2562 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComfyUI Pairwise Image Ranker</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Apply the saved theme before first paint (no flash). Dark is the default. -->
+    <script>
+        try { if (localStorage.getItem('comfyRanker.theme') === 'light') document.documentElement.classList.remove('dark'); } catch (e) {}
+    </script>
+    <!-- Tailwind CSS v3.4.17, pre-built (no CDN script, no console warning).
+         Its colors read the CSS variables in the theme block below, which is how light/dark mode works. -->
+    <style id="tailwind-build">
+*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border-width:0;border-style:solid;border-color:rgb(var(--c-gray-200)/1)}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:Inter,sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:JetBrains Mono,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:rgb(var(--c-gray-400)/1)}input::placeholder,textarea::placeholder{opacity:1;color:rgb(var(--c-gray-400)/1)}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width:640px){.container{max-width:640px}}@media (min-width:768px){.container{max-width:768px}}@media (min-width:1024px){.container{max-width:1024px}}@media (min-width:1280px){.container{max-width:1280px}}@media (min-width:1536px){.container{max-width:1536px}}.pointer-events-none{pointer-events:none}.\!visible{visibility:visible!important}.visible{visibility:visible}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0}.bottom-2{bottom:.5rem}.bottom-3{bottom:.75rem}.bottom-5{bottom:1.25rem}.left-1\/2{left:50%}.left-2{left:.5rem}.right-2{right:.5rem}.right-3{right:.75rem}.right-5{right:1.25rem}.top-0{top:0}.top-2{top:.5rem}.z-10{z-index:10}.z-40{z-index:40}.z-50{z-index:50}.mx-0\.5{margin-left:.125rem;margin-right:.125rem}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:.25rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mr-1{margin-right:.25rem}.mr-1\.5{margin-right:.375rem}.mt-0\.5{margin-top:.125rem}.mt-1{margin-top:.25rem}.mt-1\.5{margin-top:.375rem}.mt-3{margin-top:.75rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.inline-flex{display:inline-flex}.\!table{display:table!important}.table{display:table}.grid{display:grid}.hidden{display:none}.aspect-video{aspect-ratio:16/9}.h-12{height:3rem}.h-16{height:4rem}.h-2{height:.5rem}.h-7{height:1.75rem}.h-8{height:2rem}.h-9{height:2.25rem}.h-auto{height:auto}.h-full{height:100%}.max-h-28{max-height:7rem}.max-h-32{max-height:8rem}.max-h-60{max-height:15rem}.max-h-\[52vh\]{max-height:52vh}.max-h-\[55vh\]{max-height:55vh}.max-h-\[76vh\]{max-height:76vh}.max-h-\[90vh\]{max-height:90vh}.min-h-screen{min-height:100vh}.w-12{width:3rem}.w-16{width:4rem}.w-7{width:1.75rem}.w-8{width:2rem}.w-9{width:2.25rem}.w-auto{width:auto}.w-full{width:100%}.min-w-0{min-width:0}.min-w-\[140px\]{min-width:140px}.min-w-\[240px\]{min-width:240px}.max-w-4xl{max-width:56rem}.max-w-\[180px\]{max-width:180px}.max-w-\[96vw\]{max-width:96vw}.max-w-\[98vw\]{max-width:98vw}.max-w-md{max-width:28rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.-translate-x-1\/2{--tw-translate-x:-50%}.-translate-x-1\/2,.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-not-allowed{cursor:not-allowed}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;-moz-user-select:none;user-select:none}.resize-y{resize:vertical}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-cols-\[auto_minmax\(0\2c 1fr\)\]{grid-template-columns:auto minmax(0,1fr)}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:.25rem}.gap-1\.5{gap:.375rem}.gap-2{gap:.5rem}.gap-2\.5{gap:.625rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.gap-x-3{-moz-column-gap:.75rem;column-gap:.75rem}.gap-x-4{-moz-column-gap:1rem;column-gap:1rem}.gap-y-0\.5{row-gap:.125rem}.gap-y-1{row-gap:.25rem}.gap-y-1\.5{row-gap:.375rem}.space-y-0\.5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.125rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.125rem*var(--tw-space-y-reverse))}.space-y-2>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.5rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.5rem*var(--tw-space-y-reverse))}.space-y-2\.5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.625rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.625rem*var(--tw-space-y-reverse))}.space-y-3>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.75rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.75rem*var(--tw-space-y-reverse))}.overflow-auto{overflow:auto}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis}.truncate,.whitespace-nowrap{white-space:nowrap}.whitespace-pre-wrap{white-space:pre-wrap}.break-words{overflow-wrap:break-word}.break-all{word-break:break-all}.rounded{border-radius:.25rem}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-md{border-radius:.375rem}.rounded-xl{border-radius:.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-amber-500\/15{border-color:rgba(245,158,11,.15)}.border-amber-500\/40{border-color:rgba(245,158,11,.4)}.border-amber-500\/50{border-color:rgba(245,158,11,.5)}.border-amber-500\/70{border-color:rgba(245,158,11,.7)}.border-amber-700\/60{border-color:rgba(180,83,9,.6)}.border-comfy-blue{--tw-border-opacity:1;border-color:rgb(var(--comfy-blue)/var(--tw-border-opacity,1))}.border-comfy-blue\/40{border-color:rgb(var(--comfy-blue)/.4)}.border-comfy-blue\/50{border-color:rgb(var(--comfy-blue)/.5)}.border-comfy-border{--tw-border-opacity:1;border-color:rgb(var(--comfy-border)/var(--tw-border-opacity,1))}.border-comfy-border\/60{border-color:rgb(var(--comfy-border)/.6)}.border-emerald-500\/30{border-color:rgba(16,185,129,.3)}.border-emerald-500\/40{border-color:rgba(16,185,129,.4)}.border-emerald-500\/50{border-color:rgba(16,185,129,.5)}.border-purple-500\/30{border-color:rgba(168,85,247,.3)}.border-red-500\/30{border-color:rgba(239,68,68,.3)}.border-red-500\/40{border-color:rgba(239,68,68,.4)}.border-red-500\/50{border-color:rgba(239,68,68,.5)}.border-slate-400\/50{border-color:rgba(148,163,184,.5)}.border-white\/10{border-color:rgb(var(--c-white)/.1)}.bg-amber-500{--tw-bg-opacity:1;background-color:rgb(245 158 11/var(--tw-bg-opacity,1))}.bg-amber-500\/10{background-color:rgba(245,158,11,.1)}.bg-amber-500\/15{background-color:rgba(245,158,11,.15)}.bg-amber-500\/20{background-color:rgba(245,158,11,.2)}.bg-amber-700{--tw-bg-opacity:1;background-color:rgb(180 83 9/var(--tw-bg-opacity,1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0/var(--tw-bg-opacity,1))}.bg-black\/60{background-color:rgba(0,0,0,.6)}.bg-black\/70{background-color:rgba(0,0,0,.7)}.bg-black\/75{background-color:rgba(0,0,0,.75)}.bg-black\/80{background-color:rgba(0,0,0,.8)}.bg-comfy-bg{--tw-bg-opacity:1;background-color:rgb(var(--comfy-bg)/var(--tw-bg-opacity,1))}.bg-comfy-bg\/70{background-color:rgb(var(--comfy-bg)/.7)}.bg-comfy-blue{--tw-bg-opacity:1;background-color:rgb(var(--comfy-blue)/var(--tw-bg-opacity,1))}.bg-comfy-blue\/20{background-color:rgb(var(--comfy-blue)/.2)}.bg-comfy-card{--tw-bg-opacity:1;background-color:rgb(var(--comfy-card)/var(--tw-bg-opacity,1))}.bg-comfy-card\/60{background-color:rgb(var(--comfy-card)/.6)}.bg-comfy-card\/90{background-color:rgb(var(--comfy-card)/.9)}.bg-comfy-card\/95{background-color:rgb(var(--comfy-card)/.95)}.bg-comfy-panel{--tw-bg-opacity:1;background-color:rgb(var(--comfy-panel)/var(--tw-bg-opacity,1))}.bg-comfy-panel\/70{background-color:rgb(var(--comfy-panel)/.7)}.bg-emerald-500\/10{background-color:rgba(16,185,129,.1)}.bg-emerald-500\/15{background-color:rgba(16,185,129,.15)}.bg-emerald-950\/90{background-color:rgba(2,44,34,.9)}.bg-purple-500\/15{background-color:rgba(168,85,247,.15)}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68/var(--tw-bg-opacity,1))}.bg-red-500\/10{background-color:rgba(239,68,68,.1)}.bg-red-500\/20{background-color:rgba(239,68,68,.2)}.bg-red-950\/90{background-color:rgba(69,10,10,.9)}.bg-slate-300{--tw-bg-opacity:1;background-color:rgb(203 213 225/var(--tw-bg-opacity,1))}.bg-gradient-to-br{background-image:linear-gradient(to bottom right,var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right,var(--tw-gradient-stops))}.from-comfy-accent{--tw-gradient-from:rgb(var(--comfy-accent)/1) var(--tw-gradient-from-position);--tw-gradient-to:rgb(var(--comfy-accent)/0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-comfy-blue{--tw-gradient-from:rgb(var(--comfy-blue)/1) var(--tw-gradient-from-position);--tw-gradient-to:rgb(var(--comfy-blue)/0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-comfy-panel{--tw-gradient-from:rgb(var(--comfy-panel)/1) var(--tw-gradient-from-position);--tw-gradient-to:rgb(var(--comfy-panel)/0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.via-comfy-card{--tw-gradient-to:rgb(var(--comfy-card)/0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),rgb(var(--comfy-card)/1) var(--tw-gradient-via-position),var(--tw-gradient-to)}.to-amber-600{--tw-gradient-to:#d97706 var(--tw-gradient-to-position)}.to-blue-600{--tw-gradient-to:#2563eb var(--tw-gradient-to-position)}.to-comfy-panel{--tw-gradient-to:rgb(var(--comfy-panel)/1) var(--tw-gradient-to-position)}.to-emerald-400{--tw-gradient-to:rgb(var(--c-emerald-400)/1) var(--tw-gradient-to-position)}.object-contain{-o-object-fit:contain;object-fit:contain}.object-cover{-o-object-fit:cover;object-fit:cover}.p-1{padding:.25rem}.p-2{padding:.5rem}.p-2\.5{padding:.625rem}.p-3{padding:.75rem}.p-3\.5{padding:.875rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-8{padding:2rem}.px-1\.5{padding-left:.375rem;padding-right:.375rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-2\.5{padding-left:.625rem;padding-right:.625rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-3\.5{padding-left:.875rem;padding-right:.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-1\.5{padding-top:.375rem;padding-bottom:.375rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-1\.5{padding-bottom:.375rem}.pb-3{padding-bottom:.75rem}.pt-1{padding-top:.25rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.font-mono{font-family:JetBrains Mono,monospace}.font-sans{font-family:Inter,sans-serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-normal{font-weight:400}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.italic{font-style:italic}.tabular-nums{--tw-numeric-spacing:tabular-nums;font-variant-numeric:var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)}.tracking-tight{letter-spacing:-.025em}.tracking-wider{letter-spacing:.05em}.text-amber-400{--tw-text-opacity:1;color:rgb(var(--c-amber-400)/var(--tw-text-opacity,1))}.text-amber-400\/70{color:rgb(var(--c-amber-400)/.7)}.text-black{--tw-text-opacity:1;color:rgb(0 0 0/var(--tw-text-opacity,1))}.text-comfy-accent{--tw-text-opacity:1;color:rgb(var(--comfy-accent)/var(--tw-text-opacity,1))}.text-comfy-blue{--tw-text-opacity:1;color:rgb(var(--comfy-blue)/var(--tw-text-opacity,1))}.text-emerald-200{--tw-text-opacity:1;color:rgb(var(--c-emerald-200)/var(--tw-text-opacity,1))}.text-emerald-300{--tw-text-opacity:1;color:rgb(var(--c-emerald-300)/var(--tw-text-opacity,1))}.text-emerald-400{--tw-text-opacity:1;color:rgb(var(--c-emerald-400)/var(--tw-text-opacity,1))}.text-gray-100{--tw-text-opacity:1;color:rgb(var(--c-gray-100)/var(--tw-text-opacity,1))}.text-gray-200{--tw-text-opacity:1;color:rgb(var(--c-gray-200)/var(--tw-text-opacity,1))}.text-gray-300{--tw-text-opacity:1;color:rgb(var(--c-gray-300)/var(--tw-text-opacity,1))}.text-gray-400{--tw-text-opacity:1;color:rgb(var(--c-gray-400)/var(--tw-text-opacity,1))}.text-gray-500{--tw-text-opacity:1;color:rgb(var(--c-gray-500)/var(--tw-text-opacity,1))}.text-purple-300{--tw-text-opacity:1;color:rgb(var(--c-purple-300)/var(--tw-text-opacity,1))}.text-purple-400{--tw-text-opacity:1;color:rgb(var(--c-purple-400)/var(--tw-text-opacity,1))}.text-red-200{--tw-text-opacity:1;color:rgb(var(--c-red-200)/var(--tw-text-opacity,1))}.text-red-300{--tw-text-opacity:1;color:rgb(var(--c-red-300)/var(--tw-text-opacity,1))}.text-red-400{--tw-text-opacity:1;color:rgb(var(--c-red-400)/var(--tw-text-opacity,1))}.text-sky-400{--tw-text-opacity:1;color:rgb(56 189 248/var(--tw-text-opacity,1))}.text-white{--tw-text-opacity:1;color:rgb(var(--c-white)/var(--tw-text-opacity,1))}.accent-comfy-blue{accent-color:rgb(var(--comfy-blue)/1)}.opacity-0{opacity:0}.opacity-40{opacity:.4}.shadow{--tw-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color),0 1px 2px -1px var(--tw-shadow-color)}.shadow,.shadow-2xl{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgba(0,0,0,.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color)}.shadow-\[0_0_30px_rgba\(245\2c 158\2c 11\2c 0\.15\)\]{--tw-shadow:0 0 30px rgba(245,158,11,.15);--tw-shadow-colored:0 0 30px var(--tw-shadow-color)}.shadow-\[0_0_30px_rgba\(245\2c 158\2c 11\2c 0\.15\)\],.shadow-lg{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color),0 4px 6px -4px var(--tw-shadow-color)}.shadow-md{--tw-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color),0 2px 4px -2px var(--tw-shadow-color)}.shadow-md,.shadow-xl{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color),0 8px 10px -6px var(--tw-shadow-color)}.outline-none{outline:2px solid transparent;outline-offset:2px}.ring-2{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.ring-sky-400{--tw-ring-opacity:1;--tw-ring-color:rgb(56 189 248/var(--tw-ring-opacity,1))}.blur{--tw-blur:blur(8px)}.blur,.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur{--tw-backdrop-blur:blur(8px)}.backdrop-blur,.backdrop-blur-sm{-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px)}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1)}.duration-150,.transition-all{transition-duration:.15s}.duration-200{transition-duration:.2s}.duration-300{transition-duration:.3s}.selection\:bg-comfy-blue ::-moz-selection{--tw-bg-opacity:1;background-color:rgb(var(--comfy-blue)/var(--tw-bg-opacity,1))}.selection\:bg-comfy-blue ::selection{--tw-bg-opacity:1;background-color:rgb(var(--comfy-blue)/var(--tw-bg-opacity,1))}.selection\:text-white ::-moz-selection{--tw-text-opacity:1;color:rgb(var(--c-white)/var(--tw-text-opacity,1))}.selection\:text-white ::selection{--tw-text-opacity:1;color:rgb(var(--c-white)/var(--tw-text-opacity,1))}.selection\:bg-comfy-blue::-moz-selection{--tw-bg-opacity:1;background-color:rgb(var(--comfy-blue)/var(--tw-bg-opacity,1))}.selection\:bg-comfy-blue::selection{--tw-bg-opacity:1;background-color:rgb(var(--comfy-blue)/var(--tw-bg-opacity,1))}.selection\:text-white::-moz-selection{--tw-text-opacity:1;color:rgb(var(--c-white)/var(--tw-text-opacity,1))}.selection\:text-white::selection{--tw-text-opacity:1;color:rgb(var(--c-white)/var(--tw-text-opacity,1))}.first\:border-0:first-child,.last\:border-0:last-child{border-width:0}.hover\:border-gray-500:hover{--tw-border-opacity:1;border-color:rgb(var(--c-gray-500)/var(--tw-border-opacity,1))}.hover\:border-red-500\/30:hover{border-color:rgba(239,68,68,.3)}.hover\:bg-amber-400:hover{--tw-bg-opacity:1;background-color:rgb(var(--c-amber-400)/var(--tw-bg-opacity,1))}.hover\:bg-blue-600:hover{--tw-bg-opacity:1;background-color:rgb(37 99 235/var(--tw-bg-opacity,1))}.hover\:bg-comfy-blue:hover{--tw-bg-opacity:1;background-color:rgb(var(--comfy-blue)/var(--tw-bg-opacity,1))}.hover\:bg-gray-700:hover{--tw-bg-opacity:1;background-color:rgb(var(--c-gray-700)/var(--tw-bg-opacity,1))}.hover\:bg-red-500:hover{--tw-bg-opacity:1;background-color:rgb(239 68 68/var(--tw-bg-opacity,1))}.hover\:bg-red-500\/20:hover{background-color:rgba(239,68,68,.2)}.hover\:bg-red-500\/30:hover{background-color:rgba(239,68,68,.3)}.hover\:from-blue-500:hover{--tw-gradient-from:#3b82f6 var(--tw-gradient-from-position);--tw-gradient-to:rgba(59,130,246,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.hover\:to-blue-600:hover{--tw-gradient-to:#2563eb var(--tw-gradient-to-position)}.hover\:text-red-300:hover{--tw-text-opacity:1;color:rgb(var(--c-red-300)/var(--tw-text-opacity,1))}.hover\:text-red-400:hover{--tw-text-opacity:1;color:rgb(var(--c-red-400)/var(--tw-text-opacity,1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(var(--c-white)/var(--tw-text-opacity,1))}.hover\:underline:hover{text-decoration-line:underline}.hover\:opacity-80:hover{opacity:.8}.focus\:border-comfy-blue:focus{--tw-border-opacity:1;border-color:rgb(var(--comfy-blue)/var(--tw-border-opacity,1))}.disabled\:cursor-default:disabled{cursor:default}.disabled\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\:opacity-40:disabled{opacity:.4}.disabled\:opacity-50:disabled{opacity:.5}.disabled\:hover\:bg-comfy-blue:hover:disabled{--tw-bg-opacity:1;background-color:rgb(var(--comfy-blue)/var(--tw-bg-opacity,1))}.group:hover .group-hover\:scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05}.group:hover .group-hover\:scale-105,.group:hover .group-hover\:scale-\[1\.01\]{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:scale-\[1\.01\]{--tw-scale-x:1.01;--tw-scale-y:1.01}.group:hover .group-hover\:opacity-100{opacity:1}@media (min-width:640px){.sm\:block{display:block}.sm\:inline-block{display:inline-block}.sm\:inline{display:inline}.sm\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.sm\:flex-nowrap{flex-wrap:nowrap}.sm\:gap-3{gap:.75rem}.sm\:px-3{padding-left:.75rem;padding-right:.75rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-sm{font-size:.875rem;line-height:1.25rem}}@media (min-width:768px){.md\:flex{display:flex}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}}@media (min-width:1024px){.lg\:col-span-2{grid-column:span 2/span 2}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.lg\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}}@media (min-width:1280px){.xl\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.xl\:grid-cols-6{grid-template-columns:repeat(6,minmax(0,1fr))}}
+    </style>
+    <style>
+        /* ---------- THEME TOKENS ----------
+           Tailwind colors in this file read these RGB variables, so one class switch re-themes the page.
+           Dark = <html class="dark"> (default). Light = no "dark" class. */
+        :root {
+            /* Surfaces (light) */
+            --comfy-bg: 238 240 244; --comfy-panel: 255 255 255; --comfy-card: 246 247 249; --comfy-border: 214 218 225;
+            --comfy-accent: 200 82 40; --comfy-blue: 29 111 224; --comfy-gold: 217 119 6;
+            --frame: 226 229 235; --scroll-track: 232 234 239; --scroll-thumb: 196 201 210; --scroll-thumb-hover: 160 166 178;
+            color-scheme: light;
+        }
+        html.dark {
+            /* Surfaces (dark, the original ComfyUI look) */
+            --comfy-bg: 18 19 22; --comfy-panel: 27 29 34; --comfy-card: 36 39 46; --comfy-border: 51 55 66;
+            --comfy-accent: 224 108 68; --comfy-blue: 56 139 253; --comfy-gold: 245 158 11;
+            --frame: 0 0 0; --scroll-track: 24 26 31; --scroll-thumb: 51 55 66; --scroll-thumb-hover: 75 81 98;
+            color-scheme: dark;
+        }
+        /* Ink (text) colors, light theme: "white" text becomes near-black, the gray scale is reversed,
+           and accent texts get darker shades that read on white. */
+        :root {
+            --c-white: 17 24 39;
+            --c-gray-100: 17 24 39; --c-gray-200: 31 41 55; --c-gray-300: 55 65 81; --c-gray-400: 75 85 99;
+            --c-gray-500: 107 114 128; --c-gray-600: 156 163 175; --c-gray-700: 229 231 235; --c-gray-800: 243 244 246; --c-gray-900: 249 250 251;
+            --c-amber-400: 180 83 9; --c-emerald-200: 6 95 70; --c-emerald-300: 4 120 87; --c-emerald-400: 4 120 87;
+            --c-red-200: 153 27 27; --c-red-300: 185 28 28; --c-red-400: 185 28 28; --c-purple-300: 126 34 206; --c-purple-400: 126 34 206;
+        }
+        /* Ink colors, dark theme. Also applied in light mode on anything that stays dark or colored:
+           solid buttons, image overlay pills and toasts, so their white text stays white. */
+        html.dark,
+        html:not(.dark) [class~="bg-black/75"],
+        html:not(.dark) [class~="bg-black/80"].absolute,
+        html:not(.dark) [class~="bg-comfy-blue"],
+        html:not(.dark) [class~="from-comfy-blue"],
+        html:not(.dark) [class~="from-comfy-accent"],
+        html:not(.dark) [class~="bg-red-500"],
+        html:not(.dark) [class~="bg-amber-700"],
+        html:not(.dark) [class~="bg-emerald-950/90"],
+        html:not(.dark) [class~="bg-red-950/90"],
+        html:not(.dark) [class~="hover:bg-comfy-blue"]:hover,
+        html:not(.dark) [class~="hover:bg-red-500"]:hover {
+            --c-white: 255 255 255;
+            --c-gray-100: 243 244 246; --c-gray-200: 229 231 235; --c-gray-300: 209 213 219; --c-gray-400: 156 163 175;
+            --c-gray-500: 107 114 128; --c-gray-600: 75 85 99; --c-gray-700: 55 65 81; --c-gray-800: 31 41 55; --c-gray-900: 17 24 39;
+            --c-amber-400: 251 191 36; --c-emerald-200: 167 243 208; --c-emerald-300: 110 231 183; --c-emerald-400: 52 211 153;
+            --c-red-200: 254 202 202; --c-red-300: 252 165 165; --c-red-400: 248 113 113; --c-purple-300: 216 180 254; --c-purple-400: 192 132 252;
+        }
+        /* Image frames: black in dark mode, soft gray in light mode */
+        html:not(.dark) [class~="bg-black/70"],
+        html:not(.dark) [class~="bg-black/60"],
+        html:not(.dark) [class~="bg-black/80"]:not(.absolute):not(#metadataModal),
+        html:not(.dark) img[class~="bg-black"] {
+            background-color: rgb(var(--frame));
+        }
+        html:not(.dark) .shadow-md, html:not(.dark) .shadow-lg, html:not(.dark) .shadow-xl, html:not(.dark) .shadow-2xl {
+            --tw-shadow-color: rgb(15 23 42 / 0.08);
+            --tw-shadow: var(--tw-shadow-colored);
+        }
+
+        body {
+            background-color: rgb(var(--comfy-bg));
+            color: rgb(var(--c-gray-200));
+            overflow-x: hidden;
+        }
+        /* Custom scrollbar matching the active theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgb(var(--scroll-track));
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgb(var(--scroll-thumb));
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgb(var(--scroll-thumb-hover));
+        }
+        .drop-zone-active {
+            border-color: #388bfd !important;
+            background-color: rgba(56, 139, 253, 0.08) !important;
+        }
+        .choice-card {
+            transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .choice-card:hover {
+            border-color: #388bfd;
+            box-shadow: 0 0 25px rgba(56, 139, 253, 0.2);
+        }
+        .choice-card:active {
+            transform: scale(0.99);
+        }
+        /* Synchronized zoom loupe overlay */
+        /* Hide the "Prefer ..." hover pill while the magnifier is on, so it doesn't cover what you're inspecting */
+        .loupe-active .prefer-pill-text { display: none; }
+        .loupe-active [id$="ImgWrapper"] { cursor: crosshair; }
+        .loupe-active [id$="ImgWrapper"] > .absolute.bottom-3 { display: none; }
+        .loupe-lens {
+            pointer-events: none;
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            border: 2px solid #388bfd;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+            background-repeat: no-repeat;
+            z-index: 30;
+            display: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-comfy-blue selection:text-white">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-comfy-panel border-b border-comfy-border sticky top-0 z-40 px-3 py-2.5 shadow-md">
+        <div class="w-full max-w-[98vw] mx-auto flex flex-wrap items-center justify-between gap-3">
+            <!-- Brand & Stage Indicator -->
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-comfy-accent to-amber-600 flex items-center justify-center text-white font-bold shadow">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-base sm:text-lg tracking-tight text-white flex items-center gap-2">
+                        ComfyUI Variation Ranker
+                        <span id="batchCountBadge" class="hidden text-xs font-mono px-2 py-0.5 rounded bg-comfy-card border border-comfy-border text-gray-300">0 images</span>
+                    </h1>
+                    <p class="text-xs text-gray-400 hidden sm:block">Side-by-side pairwise image comparator with automatic PNG workflow metadata extraction</p>
+                </div>
+            </div>
+
+            <!-- Navigation Steps & Global Actions -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Step Pills -->
+                <div class="hidden md:flex items-center bg-comfy-bg p-1 rounded-lg border border-comfy-border text-xs font-medium">
+                    <button id="navGalleryBtn" onclick="switchView('gallery')" class="px-3 py-1.5 rounded-md transition flex items-center gap-1.5 bg-comfy-card text-white shadow">
+                        <i class="fa-regular fa-images"></i> 1. Gallery
+                    </button>
+                    <button id="navCompareBtn" onclick="switchView('compare')" disabled class="px-3 py-1.5 rounded-md transition flex items-center gap-1.5 text-gray-500 cursor-not-allowed">
+                        <i class="fa-solid fa-code-compare"></i> 2. Compare
+                    </button>
+                    <button id="navResultsBtn" onclick="switchView('results')" disabled class="px-3 py-1.5 rounded-md transition flex items-center gap-1.5 text-gray-500 cursor-not-allowed">
+                        <i class="fa-solid fa-trophy"></i> 3. Top-3 Ranks
+                    </button>
+                </div>
+
+                <!-- Light / Dark Theme Toggle -->
+                <button id="themeToggleBtn" type="button" onclick="toggleTheme()" class="w-9 h-9 rounded-lg bg-comfy-card hover:bg-gray-700 text-gray-300 border border-comfy-border transition flex items-center justify-center cursor-pointer" title="Switch to light mode" aria-label="Switch to light mode">
+                    <i id="themeToggleIcon" class="fa-solid fa-sun text-amber-400"></i>
+                </button>
+
+                <!-- Clear Gallery Button (Always accessible) -->
+                <button id="clearGalleryHeaderBtn" onclick="clearGallery()" class="px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 transition flex items-center gap-2 cursor-pointer" title="Clear all images and start next batch">
+                    <i class="fa-solid fa-trash-can"></i>
+                    <span>Clear Gallery</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area (Edge-to-Edge 98vw for maximum Landscape Image Area) -->
+    <main class="flex-1 w-full max-w-[98vw] mx-auto px-2 sm:px-3 py-4 flex flex-col">
+
+        <!-- ========================================== -->
+        <!-- VIEW 1: GALLERY & DRAG-AND-DROP            -->
+        <!-- ========================================== -->
+        <section id="viewGallery" class="flex-1 flex flex-col gap-5">
+            <!-- Upload & Configuration Banner -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                <!-- Drag and Drop Zone -->
+                <div id="dropZone" class="lg:col-span-2 border-2 border-dashed border-comfy-border hover:border-gray-500 bg-comfy-panel/70 rounded-xl p-8 flex flex-col items-center justify-center text-center transition cursor-pointer relative group" onclick="document.getElementById('fileInput').click()">
+                    <input type="file" id="fileInput" multiple accept="image/*" class="hidden" onchange="handleFileSelect(event)">
+                    <div class="w-16 h-16 rounded-2xl bg-comfy-card border border-comfy-border flex items-center justify-center text-comfy-blue text-2xl mb-4 group-hover:scale-105 transition">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+                    <h2 class="text-lg font-semibold text-white mb-1">Drag & Drop your AI Image Batch here</h2>
+                    <p class="text-sm text-gray-400 max-w-md mb-4">
+                        Drop 5–10+ similar variation images at once (PNG, WebP, JPG). ComfyUI PNG metadata (<code class="text-amber-400 font-mono text-xs">Model, Seed, Steps, CFG, LoRAs, Noise Aug</code>) is parsed automatically.
+                    </p>
+                    <div class="flex flex-wrap items-center justify-center gap-3">
+                        <span class="px-4 py-2 rounded-lg bg-comfy-blue hover:bg-blue-600 text-white text-sm font-medium transition shadow">
+                            <i class="fa-solid fa-folder-open mr-1.5"></i> Browse Images
+                        </span>
+                        <button type="button" onclick="event.stopPropagation(); loadDemoBatch()" class="px-3.5 py-2 rounded-lg bg-comfy-card hover:bg-gray-700 text-gray-300 border border-comfy-border text-sm font-medium transition">
+                            <i class="fa-solid fa-wand-magic-sparkles mr-1.5 text-amber-400"></i> Load Sample Batch (6 Variations)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Control Panel to Start Comparison -->
+                <div class="bg-comfy-panel border border-comfy-border rounded-xl p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between border-b border-comfy-border pb-3 mb-4">
+                            <h3 class="font-semibold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-sliders text-comfy-accent"></i> Ranking Setup
+                            </h3>
+                            <span id="galleryStatsPill" class="text-xs font-mono text-gray-400">0 loaded</span>
+                        </div>
+
+                        <!-- Mode Selection -->
+                        <label class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Comparison Mode</label>
+                        <div class="space-y-2.5 mb-4">
+                            <label class="flex items-start gap-3 p-3 rounded-lg bg-comfy-card border border-comfy-border cursor-pointer hover:border-gray-500 transition">
+                                <input type="radio" name="rankMode" value="roundrobin" checked onchange="updateComparisonEstimate()" class="mt-1 accent-comfy-blue">
+                                <div class="text-xs">
+                                    <div class="font-semibold text-white">All Pairwise Comparisons (Round-Robin)</div>
+                                    <div class="text-gray-400 mt-0.5">Every image faces every other image once. Ideal for 5–10 images to get exact win counts.</div>
+                                </div>
+                            </label>
+                            <label class="flex items-start gap-3 p-3 rounded-lg bg-comfy-card border border-comfy-border cursor-pointer hover:border-gray-500 transition">
+                                <input type="radio" name="rankMode" value="mergesort" onchange="updateComparisonEstimate()" class="mt-1 accent-comfy-blue">
+                                <div class="text-xs">
+                                    <div class="font-semibold text-white">Fast Tournament Sort (Merge-Sort)</div>
+                                    <div class="text-gray-400 mt-0.5">Uses transitivity to minimize clicks when ranking larger batches (10+ images).</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="p-3 rounded-lg bg-comfy-bg border border-comfy-border text-xs flex items-center justify-between text-gray-300 mb-4">
+                            <span>Total Comparisons Needed:</span>
+                            <span id="estComparisonsText" class="font-mono font-bold text-comfy-blue text-sm">0 rounds</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2.5">
+                        <button id="startRankingBtn" onclick="startRanking()" disabled class="w-full py-3 px-4 rounded-xl font-semibold text-sm bg-gradient-to-r from-comfy-blue to-blue-600 hover:from-blue-500 hover:to-blue-600 text-white shadow-lg transition flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Start Comparison Rounds</span>
+                        </button>
+                        <button onclick="clearGallery()" id="clearGallerySubBtn" disabled class="w-full py-2 px-3 rounded-lg text-xs font-medium bg-comfy-card hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30 text-gray-400 border border-comfy-border transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
+                            <i class="fa-solid fa-rotate-left mr-1"></i> Clear Gallery
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loaded Gallery Grid -->
+            <div class="flex-1 flex flex-col bg-comfy-panel border border-comfy-border rounded-xl p-5">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                    <h3 class="font-semibold text-white flex items-center gap-2">
+                        <i class="fa-regular fa-images text-comfy-blue"></i> Loaded Gallery Batch
+                    </h3>
+                    <span class="text-xs text-gray-400">Click the <i class="fa-solid fa-circle-info text-comfy-blue mx-0.5"></i> icon on any thumbnail to inspect its full ComfyUI metadata</span>
+                </div>
+
+                <!-- Empty State -->
+                <div id="galleryEmptyState" class="flex-1 py-16 flex flex-col items-center justify-center text-center text-gray-500">
+                    <i class="fa-regular fa-images text-4xl mb-3 opacity-40"></i>
+                    <p class="text-sm font-medium text-gray-400">Your gallery is currently empty</p>
+                    <p class="text-xs mt-1">Drag and drop 5–10 AI variation images above to begin</p>
+                </div>
+
+                <!-- Thumbnail Grid -->
+                <div id="galleryGrid" class="hidden grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"></div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 2: SIDE-BY-SIDE COMPARISON ARENA      -->
+        <!-- ========================================== -->
+        <section id="viewCompare" class="hidden flex-1 flex flex-col gap-3">
+            <!-- Arena Control Bar -->
+            <div class="bg-comfy-panel border border-comfy-border rounded-xl px-3.5 py-2.5 flex flex-wrap items-center justify-between gap-3">
+                <!-- Progress Indicator -->
+                <div class="flex items-center gap-4 flex-1 min-w-[240px]">
+                    <div class="px-3 py-1.5 rounded-lg bg-comfy-card border border-comfy-border font-mono text-xs sm:text-sm font-bold text-white whitespace-nowrap">
+                        Round <span id="currentRoundNum" class="text-comfy-blue">1</span> / <span id="totalRoundNum">10</span>
+                    </div>
+                    <span id="recheckBadge" class="hidden px-2 py-1 rounded-lg bg-amber-500/15 border border-amber-500/40 text-amber-400 text-xs font-semibold whitespace-nowrap" title="This pair was part of a contradiction and is being asked again">
+                        <i class="fa-solid fa-rotate mr-1"></i>Re-check
+                    </span>
+                    <div class="flex-1 max-w-md">
+                        <div class="flex justify-between text-xs text-gray-400 mb-1">
+                            <span>Comparison Progress</span>
+                            <span id="progressPercentText" class="font-mono text-gray-300">0%</span>
+                        </div>
+                        <div class="w-full h-2 bg-comfy-bg rounded-full overflow-hidden border border-comfy-border">
+                            <div id="progressBarFill" class="h-full bg-gradient-to-r from-comfy-blue to-emerald-400 transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Helper Toggles & Undo -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <!-- Layout Mode Selector (Side-by-Side Wide vs Stacked Top/Bottom) -->
+                    <button id="toggleLayoutModeBtn" onclick="cycleLayoutMode()" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-comfy-card hover:bg-gray-700 text-gray-300 border border-comfy-border transition flex items-center gap-1.5 cursor-pointer" title="Switch between Wide Side-by-Side and Stacked Top/Bottom layout for ultra-wide images">
+                        <i class="fa-solid fa-table-columns text-emerald-400"></i>
+                        <span>Layout: <strong id="layoutModeText">Side-by-Side (Wide)</strong></span>
+                    </button>
+
+                    <!-- Image Fit Mode Toggle (Fill Width vs Fit Height) -->
+                    <button id="toggleFitModeBtn" onclick="toggleImageFitMode()" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-comfy-card hover:bg-gray-700 text-gray-300 border border-comfy-border transition flex items-center gap-1.5 cursor-pointer" title="Toggle between filling the full card width vs capping height to 75% screen height">
+                        <i class="fa-solid fa-expand text-purple-400"></i>
+                        <span>Sizing: <strong id="fitModeText">Fill Card Width</strong></span>
+                    </button>
+
+                    <button id="toggleLoupeBtn" onclick="toggleSyncLoupe()" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-comfy-card hover:bg-gray-700 text-gray-300 border border-comfy-border transition flex items-center gap-1.5 cursor-pointer" title="Synchronized magnifier (M): hover one image to magnify the same spot on both. Scroll the mouse wheel over an image to change the zoom.">
+                        <i class="fa-solid fa-magnifying-glass-plus text-comfy-blue"></i>
+                        <span>Magnifier (M): <strong id="loupeStateText">OFF</strong></span>
+                    </button>
+
+                    <button id="toggleMetaDuringVoteBtn" onclick="toggleBlindMode()" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-comfy-card hover:bg-gray-700 text-gray-300 border border-amber-500/50 transition flex items-center gap-1.5 cursor-pointer" title="Blind Mode hides filenames, model names and generation parameters while voting. Hold Space to peek.">
+                        <i id="blindStateIcon" class="fa-solid fa-eye-slash text-amber-400"></i>
+                        <span>Blind Mode: <strong id="blindStateText">ON</strong></span>
+                    </button>
+
+                    <button id="tieVoteBtn" onclick="recordVote('tie')" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-comfy-card hover:bg-gray-700 text-gray-300 border border-comfy-border transition flex items-center gap-1.5 cursor-pointer" title="Too close to call: both images get half a point (↓)">
+                        <i class="fa-solid fa-equals text-sky-400"></i>
+                        <span>Tie (↓)</span>
+                    </button>
+
+                    <button id="undoVoteBtn" onclick="undoLastVote()" disabled class="px-3 py-1.5 rounded-lg text-xs font-medium bg-comfy-card hover:bg-gray-700 text-gray-300 border border-comfy-border transition flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>Undo</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Compact Instruction Prompt -->
+            <div class="text-center text-xs text-gray-400 flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+                <span><i class="fa-solid fa-mouse-pointer text-comfy-blue mr-1"></i> Click the image you prefer</span>
+                <span class="hidden sm:inline">•</span>
+                <span class="hidden sm:inline"><i class="fa-solid fa-keyboard text-amber-400 mr-1"></i> <kbd class="px-1.5 py-0.5 bg-comfy-card border border-comfy-border rounded text-gray-300 font-mono">←</kbd> / <kbd class="px-1.5 py-0.5 bg-comfy-card border border-comfy-border rounded text-gray-300 font-mono">→</kbd> pick, <kbd class="px-1.5 py-0.5 bg-comfy-card border border-comfy-border rounded text-gray-300 font-mono">↓</kbd> tie, <kbd class="px-1.5 py-0.5 bg-comfy-card border border-comfy-border rounded text-gray-300 font-mono">M</kbd> magnifier</span>
+                <span id="loupeHint" class="hidden"><i class="fa-solid fa-magnifying-glass text-comfy-blue mr-1"></i> Scroll over an image to zoom</span>
+                <span class="hidden sm:inline">•</span>
+                <span><i class="fa-solid fa-eye text-emerald-400 mr-1"></i> Hold <kbd class="px-1.5 py-0.5 bg-comfy-card border border-comfy-border rounded text-gray-300 font-mono">Space</kbd> to peek at specs</span>
+                <span id="peekIndicator" class="hidden px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 font-semibold">Peeking</span>
+            </div>
+
+            <!-- Side-by-Side Image Containers (Adaptive height with zero wasted vertical bars) -->
+            <div id="compareGridContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3 items-start">
+                <!-- LEFT IMAGE CARD -->
+                <div id="leftCard" onclick="recordVote('left')" class="choice-card bg-comfy-panel border-2 border-comfy-border rounded-xl flex flex-col overflow-hidden cursor-pointer relative group select-none">
+                    <!-- Top Badge -->
+                    <div class="px-3.5 py-2 bg-comfy-card/90 border-b border-comfy-border flex items-center justify-between gap-2 z-10">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span class="px-2 py-0.5 rounded bg-comfy-blue/20 border border-comfy-blue/40 text-comfy-blue font-mono text-xs font-bold shrink-0">LEFT (←)</span>
+                            <span id="leftFilename" class="font-mono text-xs text-gray-200 truncate">filename.png</span>
+                            <span id="leftDimBadge" class="hidden sm:inline-block text-[10px] font-mono px-1.5 py-0.5 rounded bg-comfy-bg text-gray-400 border border-comfy-border shrink-0"></span>
+                        </div>
+                        <button id="leftSpecsBtn" type="button" onclick="event.stopPropagation(); openMetadataModal(currentPair.left.id)" class="text-xs text-gray-400 hover:text-white px-2 py-1 rounded bg-comfy-bg border border-comfy-border transition shrink-0" title="Inspect Full Metadata">
+                            <i class="fa-solid fa-code mr-1 text-comfy-accent"></i>Specs
+                        </button>
+                    </div>
+
+                    <!-- Image Canvas Wrapper (Adapts snugly to image aspect ratio without giant black bars) -->
+                    <div id="leftImgWrapper" class="relative w-full bg-black/70 flex items-center justify-center p-1 overflow-hidden"
+                         onmousemove="handleLoupeMove(event, 'left')" onmouseleave="hideLoupes()">
+                        <img id="leftImg" src="" alt="Left Choice" class="w-full h-auto max-h-[76vh] object-contain rounded transition duration-150 block">
+                        <div id="leftLoupe" class="loupe-lens"></div>
+
+                        <!-- Hover Select Pill -->
+                        <div class="absolute bottom-3 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-comfy-blue text-white font-semibold text-xs shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none flex items-center gap-1.5">
+                            <i class="fa-solid fa-check"></i> <span class="prefer-pill-text">Prefer Left Image</span>
+                        </div>
+                    </div>
+
+                    <!-- Extracted Metadata Footer -->
+                    <div id="leftMetaBar" class="px-3 py-2.5 bg-comfy-card border-t border-comfy-border text-xs font-mono text-gray-300"></div>
+                </div>
+
+                <!-- RIGHT IMAGE CARD -->
+                <div id="rightCard" onclick="recordVote('right')" class="choice-card bg-comfy-panel border-2 border-comfy-border rounded-xl flex flex-col overflow-hidden cursor-pointer relative group select-none">
+                    <!-- Top Badge -->
+                    <div class="px-3.5 py-2 bg-comfy-card/90 border-b border-comfy-border flex items-center justify-between gap-2 z-10">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span class="px-2 py-0.5 rounded bg-amber-500/20 border border-amber-500/40 text-amber-400 font-mono text-xs font-bold shrink-0">RIGHT (→)</span>
+                            <span id="rightFilename" class="font-mono text-xs text-gray-200 truncate">filename.png</span>
+                            <span id="rightDimBadge" class="hidden sm:inline-block text-[10px] font-mono px-1.5 py-0.5 rounded bg-comfy-bg text-gray-400 border border-comfy-border shrink-0"></span>
+                        </div>
+                        <button id="rightSpecsBtn" type="button" onclick="event.stopPropagation(); openMetadataModal(currentPair.right.id)" class="text-xs text-gray-400 hover:text-white px-2 py-1 rounded bg-comfy-bg border border-comfy-border transition shrink-0" title="Inspect Full Metadata">
+                            <i class="fa-solid fa-code mr-1 text-comfy-accent"></i>Specs
+                        </button>
+                    </div>
+
+                    <!-- Image Canvas Wrapper (Adapts snugly to image aspect ratio without giant black bars) -->
+                    <div id="rightImgWrapper" class="relative w-full bg-black/70 flex items-center justify-center p-1 overflow-hidden"
+                         onmousemove="handleLoupeMove(event, 'right')" onmouseleave="hideLoupes()">
+                        <img id="rightImg" src="" alt="Right Choice" class="w-full h-auto max-h-[76vh] object-contain rounded transition duration-150 block">
+                        <div id="rightLoupe" class="loupe-lens"></div>
+
+                        <!-- Hover Select Pill -->
+                        <div class="absolute bottom-3 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-comfy-blue text-white font-semibold text-xs shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none flex items-center gap-1.5">
+                            <i class="fa-solid fa-check"></i> Prefer Right Image
+                        </div>
+                    </div>
+
+                    <!-- Extracted Metadata Footer -->
+                    <div id="rightMetaBar" class="px-3 py-2.5 bg-comfy-card border-t border-comfy-border text-xs font-mono text-gray-300"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 3: TOP-3 SELECTED & FULL LEADERBOARD  -->
+        <!-- ========================================== -->
+        <section id="viewResults" class="hidden flex-1 flex flex-col gap-6">
+            <!-- Top Banner with Batch Actions -->
+            <div class="bg-gradient-to-r from-comfy-panel via-comfy-card to-comfy-panel border border-comfy-border rounded-xl p-5 flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <div class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-amber-400 mb-1">
+                        <i class="fa-solid fa-trophy"></i> Pairwise Ranking Complete
+                    </div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-white">Top 3 Selected Images</h2>
+                    <p class="text-xs sm:text-sm text-gray-400 mt-0.5">Ranked by head-to-head wins. All specs are revealed here. Export the Top-3 or clear the gallery for your next batch.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <button onclick="copyTop3Info()" class="px-4 py-2.5 rounded-lg text-xs sm:text-sm font-semibold bg-comfy-blue hover:bg-blue-600 text-white shadow transition flex items-center gap-2 cursor-pointer">
+                        <i class="fa-regular fa-copy"></i>
+                        <span>Copy Top-3 Info</span>
+                    </button>
+                    <button onclick="saveTop3Markdown()" class="px-3.5 py-2.5 rounded-lg text-xs sm:text-sm font-medium bg-comfy-card hover:bg-gray-700 text-gray-200 border border-comfy-border transition flex items-center gap-2 cursor-pointer" title="Download comfyui_top3_report.md">
+                        <i class="fa-brands fa-markdown text-comfy-accent"></i>
+                        <span>Save Top-3 Report (.md)</span>
+                    </button>
+                    <button onclick="saveTop3Csv()" class="px-3.5 py-2.5 rounded-lg text-xs sm:text-sm font-medium bg-comfy-card hover:bg-gray-700 text-gray-200 border border-comfy-border transition flex items-center gap-2 cursor-pointer" title="Download comfyui_top3.csv">
+                        <i class="fa-solid fa-file-csv text-emerald-400"></i>
+                        <span>Save Top-3 (.csv)</span>
+                    </button>
+                    <button onclick="startRanking()" class="px-3.5 py-2.5 rounded-lg text-xs sm:text-sm font-medium bg-comfy-card hover:bg-gray-700 text-gray-200 border border-comfy-border transition flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-rotate"></i>
+                        <span>Re-Rank Batch</span>
+                    </button>
+                    <button onclick="clearGallery()" class="px-4 py-2.5 rounded-lg text-xs sm:text-sm font-semibold bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/40 transition flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-trash-can"></i>
+                        <span>Clear Gallery (Next Batch)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- CONSISTENCY CHECK (circular picks) -->
+            <div id="consistencyPanel"></div>
+
+            <!-- SHARED INPUT PROMPT (auto-extracted, editable) -->
+            <div class="bg-comfy-panel border border-comfy-border rounded-xl p-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                    <label for="sharedPromptInput" class="font-semibold text-white flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-quote-left text-comfy-accent"></i> Shared Input Prompt
+                    </label>
+                    <span id="sharedPromptSource" class="text-xs text-gray-400"></span>
+                </div>
+                <textarea id="sharedPromptInput" rows="3" oninput="onSharedPromptInput(this.value)" class="w-full bg-comfy-bg border border-comfy-border focus:border-comfy-blue outline-none rounded-lg p-3 font-mono text-xs text-gray-200 resize-y" placeholder="No prompt found in the PNG graphs. Type the prompt here and it will be included in the Top-3 exports."></textarea>
+            </div>
+
+            <!-- TOP 3 PODIUM GRID -->
+            <div id="top3Grid" class="grid grid-cols-1 lg:grid-cols-3 gap-5"></div>
+
+            <!-- MODEL PERFORMANCE: CURRENT BATCH + ALL-TIME -->
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
+                <div class="bg-comfy-panel border border-comfy-border rounded-xl p-5 min-w-0">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                        <h3 class="font-semibold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-chart-column text-comfy-accent"></i> Model Performance Breakdown
+                        </h3>
+                        <button id="logBatchBtn" onclick="logBatchToLeaderboard()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-comfy-blue hover:bg-blue-600 text-white transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-default disabled:hover:bg-comfy-blue">
+                            <i class="fa-solid fa-plus"></i> <span>Log Batch to Leaderboard</span>
+                        </button>
+                    </div>
+                    <p id="modelBreakdownNote" class="text-xs text-gray-400 mb-3"></p>
+                    <div id="modelBreakdownTable" class="overflow-x-auto"></div>
+                </div>
+                <div class="bg-comfy-panel border border-comfy-border rounded-xl p-5 min-w-0">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                        <h3 class="font-semibold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-ranking-star text-amber-400"></i> All-Time Model Leaderboard
+                        </h3>
+                        <button id="clearLeaderboardBtn" onclick="clearLeaderboard(this)" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 transition flex items-center gap-1.5 cursor-pointer">
+                            <i class="fa-solid fa-eraser"></i> <span>Clear Leaderboard</span>
+                        </button>
+                    </div>
+                    <p id="allTimeNote" class="text-xs text-gray-400 mb-3"></p>
+                    <div id="allTimeTable" class="overflow-x-auto"></div>
+                </div>
+            </div>
+
+            <!-- Remaining Ranked Images Table -->
+            <div class="bg-comfy-panel border border-comfy-border rounded-xl p-5">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-semibold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-list-ol text-comfy-blue"></i> Complete Batch Standings
+                    </h3>
+                    <span id="totalComparisonsSummary" class="text-xs font-mono text-gray-400"></span>
+                </div>
+                <div id="fullLeaderboardList" class="space-y-2.5"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- METADATA & LIGHTBOX INSPECTOR MODAL        -->
+    <!-- ========================================== -->
+    <div id="metadataModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4" onclick="closeMetadataModal()">
+        <div class="bg-comfy-panel border border-comfy-border rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+            <!-- Modal Header -->
+            <div class="px-5 py-4 bg-comfy-card border-b border-comfy-border flex items-center justify-between gap-4">
+                <div class="min-w-0">
+                    <h3 id="modalTitle" class="font-mono font-bold text-sm sm:text-base text-white truncate">filename.png</h3>
+                    <p id="modalSubtitle" class="text-xs text-gray-400">Extracted ComfyUI / PNG Generation Metadata</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="modalCopyFilenameBtn" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-comfy-bg hover:bg-gray-700 text-gray-200 border border-comfy-border transition cursor-pointer">
+                        <i class="fa-regular fa-copy mr-1"></i> Copy Filename
+                    </button>
+                    <button onclick="closeMetadataModal()" class="w-8 h-8 rounded-lg bg-comfy-bg hover:bg-red-500/20 hover:text-red-400 text-gray-400 flex items-center justify-center transition cursor-pointer">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-5 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- Image Preview -->
+                <div class="bg-black/60 rounded-xl border border-comfy-border p-3 flex flex-col items-center justify-center">
+                    <img id="modalImg" src="" alt="Preview" class="max-h-[55vh] w-auto object-contain rounded">
+                </div>
+
+                <!-- Structured Metadata & Raw JSON -->
+                <div class="flex flex-col gap-4">
+                    <div>
+                        <h4 class="text-xs font-semibold uppercase tracking-wider text-comfy-accent mb-2">Key Generation Parameters</h4>
+                        <div id="modalStructuredSpecs" class="bg-comfy-bg border border-comfy-border rounded-xl p-3.5 space-y-2 text-xs font-mono"></div>
+                    </div>
+
+                    <div class="flex-1 flex flex-col">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-xs font-semibold uppercase tracking-wider text-gray-400">Raw Embedded Prompt / Workflow Data</h4>
+                            <button onclick="copyRawModalJson()" class="text-xs text-comfy-blue hover:underline cursor-pointer">
+                                <i class="fa-regular fa-copy mr-1"></i>Copy JSON
+                            </button>
+                        </div>
+                        <pre id="modalRawJson" class="flex-1 bg-comfy-bg border border-comfy-border rounded-xl p-3 text-[11px] font-mono text-gray-300 overflow-auto max-h-60 whitespace-pre-wrap break-all"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TOAST NOTIFICATION                         -->
+    <!-- ========================================== -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- ========================================== -->
+    <!-- APPLICATION LOGIC                          -->
+    <!-- ========================================== -->
+    <script>
+        // --- APPLICATION STATE ---
+        let images = []; // Array of { id, filename, url, width, height, size, meta, wins, losses, matches, headToHead: {} }
+        let currentView = 'gallery'; // 'gallery' | 'compare' | 'results'
+        let rankingMode = 'roundrobin'; // 'roundrobin' | 'mergesort'
+
+        // Round-robin state
+        let matchQueue = []; // Array of { leftId, rightId }
+        let matchIndex = 0;
+        let voteHistory = []; // Stack for Undo functionality
+
+        // Merge-sort state
+        let mergeSortState = null;
+
+        // UI Toggles during comparison
+        let syncLoupeEnabled = false;
+        let showMetaDuringVote = false; // Blind Mode ON by default
+        let peekingSpecs = false;       // true while Space is held during voting
+        let sharedPrompt = '';
+        let sharedPromptEdited = false;
+        let currentRunLogged = false;
+        let recheckRounds = 0;          // how many times contradictions were re-asked this run
+        let loupeZoom = 3;              // magnifier zoom, relative to the displayed image size
+        let lastLoupeUV = null;         // last hovered point (0..1 image coords), so zooming can redraw in place
+        let imageSeq = 0;               // add-order counter for saved images
+        let compareLayoutMode = 'sidebyside'; // 'sidebyside' | 'stacked'
+        let imageFitMode = 'fillwidth'; // 'fillwidth' | 'fitscreen'
+        let currentPair = { left: null, right: null };
+        let activeModalImageId = null;
+
+        // --- INITIALIZATION & DRAG-AND-DROP EVENTS ---
+        window.addEventListener('DOMContentLoaded', () => {
+            const dropZone = document.getElementById('dropZone');
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evtName => {
+                dropZone.addEventListener(evtName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+                document.body.addEventListener(evtName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+            });
+
+            ['dragenter', 'dragover'].forEach(evtName => {
+                dropZone.addEventListener(evtName, () => dropZone.classList.add('drop-zone-active'));
+            });
+
+            ['dragleave', 'drop'].forEach(evtName => {
+                dropZone.addEventListener(evtName, () => dropZone.classList.remove('drop-zone-active'));
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                const files = e.dataTransfer?.files;
+                if (files && files.length > 0) {
+                    processFiles(Array.from(files));
+                }
+            });
+
+            // Keyboard navigation for fast voting
+            window.addEventListener('keydown', (e) => {
+                if (!document.getElementById('metadataModal').classList.contains('hidden')) {
+                    if (e.key === 'Escape') closeMetadataModal();
+                    return;
+                }
+                if (currentView !== 'compare') return;
+                if (e.code === 'Space' || e.key === ' ') {
+                    e.preventDefault();
+                    if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur();
+                    if (!e.repeat && !peekingSpecs) { peekingSpecs = true; updateBlindVisibility(); }
+                    return;
+                }
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    recordVote('tie');
+                    return;
+                }
+                if ((e.key === 'm' || e.key === 'M') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                    e.preventDefault();
+                    toggleSyncLoupe();
+                    return;
+                }
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    recordVote('left');
+                } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    recordVote('right');
+                } else if ((e.key === 'z' || e.key === 'Z') && (e.ctrlKey || e.metaKey)) {
+                    e.preventDefault();
+                    undoLastVote();
+                }
+            });
+            window.addEventListener('keyup', (e) => {
+                if ((e.code === 'Space' || e.key === ' ') && peekingSpecs) {
+                    e.preventDefault();
+                    peekingSpecs = false;
+                    updateBlindVisibility();
+                }
+            });
+            window.addEventListener('blur', () => {
+                if (peekingSpecs) { peekingSpecs = false; updateBlindVisibility(); }
+            });
+            // Mouse wheel over an image changes the magnifier zoom (only while the magnifier is on)
+            ['leftImgWrapper', 'rightImgWrapper'].forEach(id => {
+                document.getElementById(id).addEventListener('wheel', (e) => {
+                    if (!syncLoupeEnabled) return;
+                    e.preventDefault();
+                    loupeZoom = Math.min(12, Math.max(1.5, loupeZoom * (e.deltaY < 0 ? 1.2 : 1 / 1.2)));
+                    syncToggleLabels();
+                    if (lastLoupeUV) { placeLoupe('left', lastLoupeUV.u, lastLoupeUV.v); placeLoupe('right', lastLoupeUV.u, lastLoupeUV.v); }
+                    persistState();
+                }, { passive: false });
+            });
+
+            renderAllTimeLeaderboard();
+            updateThemeToggle();
+            restoreSession();
+        });
+
+        // --- LIGHT / DARK THEME ---
+        function toggleTheme() {
+            const goDark = !document.documentElement.classList.contains('dark');
+            document.documentElement.classList.toggle('dark', goDark);
+            try { localStorage.setItem('comfyRanker.theme', goDark ? 'dark' : 'light'); } catch (e) { /* storage blocked: theme still switches */ }
+            updateThemeToggle();
+        }
+
+        function updateThemeToggle() {
+            const dark = document.documentElement.classList.contains('dark');
+            const label = dark ? 'Switch to light mode' : 'Switch to dark mode';
+            const btn = document.getElementById('themeToggleBtn');
+            btn.title = label;
+            btn.setAttribute('aria-label', label);
+            // Show the theme you'll switch TO: sun in dark mode, moon in light mode
+            document.getElementById('themeToggleIcon').className = dark ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-comfy-blue';
+        }
+
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            if (files && files.length > 0) {
+                processFiles(Array.from(files));
+            }
+            event.target.value = ''; // Reset input so same files can be re-selected if cleared
+        }
+
+        // --- FILE PROCESSING & PNG METADATA PARSING ---
+        async function processFiles(fileList) {
+            const imageFiles = fileList.filter(f => f.type.startsWith('image/') || /\.(png|jpg|jpeg|webp)$/i.test(f.name));
+            if (imageFiles.length === 0) {
+                showToast('Please drop valid image files (PNG, WebP, JPG).', 'error');
+                return;
+            }
+
+            let addedCount = 0;
+            for (const file of imageFiles) {
+                const id = 'img_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8);
+                const objectUrl = URL.createObjectURL(file);
+                const dimensions = await getImageDimensions(objectUrl);
+                const meta = await extractImageMetadata(file, dimensions);
+
+                const imgObj = {
+                    id,
+                    seq: imageSeq++,
+                    filename: file.name,
+                    url: objectUrl,
+                    width: dimensions.width,
+                    height: dimensions.height,
+                    size: file.size,
+                    meta,
+                    wins: 0,
+                    losses: 0,
+                    ties: 0,
+                    matches: 0,
+                    headToHead: {}
+                };
+                images.push(imgObj);
+                persistImage(imgObj, { blob: file });
+                addedCount++;
+            }
+
+            sharedPromptEdited = false;
+            resetRankingIfAny();
+            renderGallery();
+            updateComparisonEstimate();
+            persistState();
+            showToast(`Loaded ${addedCount} image${addedCount > 1 ? 's' : ''} into gallery.`, 'success');
+        }
+
+        // The batch changed, so any ranking in progress (or finished) no longer applies
+        function resetRankingIfAny() {
+            if (!matchQueue.length && !mergeSortState && !voteHistory.length) return;
+            matchQueue = [];
+            matchIndex = 0;
+            voteHistory = [];
+            mergeSortState = null;
+            recheckRounds = 0;
+            currentRunLogged = false;
+            images.forEach(i => { i.mergeRank = null; });
+            recomputeStats();
+            setNavAvailability();
+            showToast('The batch changed, so the ranking was reset. Click Start when ready.', 'info');
+        }
+
+        function setNavAvailability() {
+            const started = matchQueue.length > 0 || !!mergeSortState;
+            const finished = isRankingFinished();
+            const off = 'px-3 py-1.5 rounded-md transition flex items-center gap-1.5 text-gray-500 cursor-not-allowed';
+            const cmp = document.getElementById('navCompareBtn');
+            const res = document.getElementById('navResultsBtn');
+            cmp.disabled = !started;
+            res.disabled = !finished;
+            if (!started) cmp.className = off;
+            if (!finished) res.className = off;
+        }
+
+        function isRankingFinished() {
+            if (rankingMode === 'roundrobin') return matchQueue.length > 0 && matchIndex >= matchQueue.length;
+            return !!mergeSortState && images.length > 0 && images.every(i => i.mergeRank != null);
+        }
+
+        // --- SCORING (derived from the vote log; a re-asked pair's newest vote replaces its old one) ---
+        function pairKey(a, b) { return a < b ? `${a}|${b}` : `${b}|${a}`; }
+
+        function effectiveVotes() {
+            const latest = new Map();
+            voteHistory.forEach(v => latest.set(pairKey(v.winnerId, v.loserId), v));
+            return [...latest.values()];
+        }
+
+        function recomputeStats() {
+            images.forEach(i => { i.wins = 0; i.losses = 0; i.ties = 0; i.matches = 0; i.headToHead = {}; });
+            const byId = Object.fromEntries(images.map(i => [i.id, i]));
+            effectiveVotes().forEach(v => {
+                const a = byId[v.winnerId], b = byId[v.loserId];
+                if (!a || !b) return;
+                a.matches++; b.matches++;
+                if (v.tie) {
+                    a.ties++; b.ties++;
+                    a.headToHead[b.id] = 0; b.headToHead[a.id] = 0;
+                } else {
+                    a.wins++; b.losses++;
+                    a.headToHead[b.id] = 1; b.headToHead[a.id] = -1;
+                }
+            });
+        }
+
+        // A tie is worth half a win
+        function points(img) { return img.wins + 0.5 * (img.ties || 0); }
+        function winRatePct(img) { return img.matches > 0 ? Math.round((points(img) / img.matches) * 100) : 0; }
+        function wlt(img) { return `${img.wins}W - ${img.losses}L${img.ties ? ` - ${img.ties}T` : ''}`; }
+
+        // --- CONTRADICTIONS: circular picks such as A beat B, B beat C, but C beat A ---
+        function findContradictions() {
+            const beats = new Map();
+            effectiveVotes().forEach(v => {
+                if (v.tie) return;
+                if (!beats.has(v.winnerId)) beats.set(v.winnerId, new Set());
+                beats.get(v.winnerId).add(v.loserId);
+            });
+            const b = (x, y) => !!(beats.get(x) && beats.get(x).has(y));
+            const ids = images.map(i => i.id);
+            const cycles = [];
+            for (let i = 0; i < ids.length; i++) {
+                for (let j = i + 1; j < ids.length; j++) {
+                    for (let k = j + 1; k < ids.length; k++) {
+                        const [x, y, z] = [ids[i], ids[j], ids[k]];
+                        if (b(x, y) && b(y, z) && b(z, x)) cycles.push([x, y, z]);
+                        else if (b(x, z) && b(z, y) && b(y, x)) cycles.push([x, z, y]);
+                    }
+                }
+            }
+            return cycles;
+        }
+
+        function contradictionPairs(cycles) {
+            const seen = new Set(), pairs = [];
+            cycles.forEach(c => {
+                for (let t = 0; t < 3; t++) {
+                    const a = c[t], b = c[(t + 1) % 3], k = pairKey(a, b);
+                    if (seen.has(k)) continue;
+                    seen.add(k);
+                    pairs.push(Math.random() < 0.5 ? { leftId: a, rightId: b, recheck: true } : { leftId: b, rightId: a, recheck: true });
+                }
+            });
+            return pairs;
+        }
+
+        function reaskContradictions() {
+            if (rankingMode !== 'roundrobin') return;
+            const pairs = contradictionPairs(findContradictions());
+            if (!pairs.length) return;
+            shuffleArray(pairs);
+            matchQueue.push(...pairs);
+            recheckRounds++;
+            document.getElementById('navResultsBtn').disabled = true;
+            switchView('compare');
+            renderCurrentMatch();
+            persistState();
+            showToast(`Re-asking ${pairs.length} pair${pairs.length > 1 ? 's' : ''}. Your new picks replace the old ones.`, 'info');
+        }
+
+        function renderConsistencyPanel() {
+            const panel = document.getElementById('consistencyPanel');
+            if (rankingMode !== 'roundrobin') {
+                panel.innerHTML = '';
+                return;
+            }
+            const cycles = findContradictions();
+            if (!cycles.length) {
+                panel.innerHTML = `<div class="px-4 py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs sm:text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-circle-check"></i> Consistent: no circular picks (A beat B, B beat C, C beat A) in this ranking.</div>`;
+                return;
+            }
+            const byId = Object.fromEntries(images.map(i => [i.id, i]));
+            const pairs = contradictionPairs(cycles);
+            const chip = id => `<span class="inline-flex items-center gap-1.5 min-w-0"><img src="${byId[id].url}" class="w-7 h-7 rounded object-cover bg-black shrink-0 cursor-pointer" onclick="openMetadataModal('${byId[id].id}')" alt=""><span class="truncate max-w-[180px]" title="${escapeHtml(byId[id].filename)}">${escapeHtml(byId[id].filename)}</span></span>`;
+            const arrow = '<i class="fa-solid fa-angle-right text-amber-400/70 shrink-0"></i>';
+            const shown = cycles.slice(0, 6).map(c => `<li class="flex flex-wrap items-center gap-2 font-mono text-[11px] text-gray-200 py-1.5 border-t border-amber-500/15 first:border-0">
+                ${chip(c[0])}${arrow}${chip(c[1])}${arrow}${chip(c[2])}${arrow}${chip(c[0])}</li>`).join('');
+            const stillNote = recheckRounds > 0
+                ? `<p class="text-xs text-amber-400 mt-1">Still circular after re-asking. These images are genuinely close; a Tie (↓) is a fair call for them.</p>` : '';
+            panel.innerHTML = `<div class="bg-amber-500/10 border border-amber-500/40 rounded-xl p-4">
+                <div class="flex flex-wrap items-start justify-between gap-3">
+                    <div class="min-w-0">
+                        <div class="font-semibold text-amber-400 text-sm flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i>
+                            ${cycles.length} contradiction${cycles.length > 1 ? 's' : ''} found</div>
+                        <p class="text-xs text-gray-300 mt-1">You picked in a circle: the first beat the second, the second beat the third, but the third beat the first. Each row reads "beat".</p>
+                        ${stillNote}
+                    </div>
+                    <button onclick="reaskContradictions()" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-black transition flex items-center gap-1.5 cursor-pointer shrink-0">
+                        <i class="fa-solid fa-rotate"></i> Re-ask ${pairs.length} pair${pairs.length > 1 ? 's' : ''}
+                    </button>
+                </div>
+                <ul class="mt-3">${shown}</ul>
+                ${cycles.length > 6 ? `<p class="text-[11px] text-gray-400 mt-1">+${cycles.length - 6} more</p>` : ''}
+            </div>`;
+        }
+
+        // --- SURVIVE A REFRESH: the batch and progress are saved in this browser (IndexedDB) ---
+        const SESSION_DB = 'comfyRankerSession';
+        let sessionDbPromise = null;
+        let persistTimer = null;
+        let persistWarned = false;
+
+        function openSessionDb() {
+            if (sessionDbPromise) return sessionDbPromise;
+            sessionDbPromise = new Promise((resolve, reject) => {
+                if (!window.indexedDB) { reject(new Error('IndexedDB unavailable')); return; }
+                const req = indexedDB.open(SESSION_DB, 1);
+                req.onupgradeneeded = () => {
+                    const db = req.result;
+                    if (!db.objectStoreNames.contains('images')) db.createObjectStore('images', { keyPath: 'id' });
+                    if (!db.objectStoreNames.contains('state')) db.createObjectStore('state');
+                };
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+            return sessionDbPromise;
+        }
+
+        function idbRun(storeName, mode, fn) {
+            return openSessionDb().then(db => new Promise((resolve, reject) => {
+                const tx = db.transaction(storeName, mode);
+                const req = fn(tx.objectStore(storeName));
+                let result;
+                if (req) req.onsuccess = () => { result = req.result; };
+                tx.oncomplete = () => resolve(result);
+                tx.onerror = () => reject(tx.error);
+                tx.onabort = () => reject(tx.error);
+            }));
+        }
+
+        function warnPersistFailure(err) {
+            console.warn('Session save failed:', err);
+            if (persistWarned) return;
+            persistWarned = true;
+            showToast('Could not save this batch for refresh recovery (browser storage full or blocked). Everything else still works.', 'error');
+        }
+
+        function persistImage(img, source) {
+            const record = {
+                id: img.id, seq: img.seq, filename: img.filename, width: img.width, height: img.height,
+                size: img.size, meta: img.meta, blob: source.blob || null, dataUrl: source.dataUrl || null
+            };
+            idbRun('images', 'readwrite', s => s.put(record)).catch(warnPersistFailure);
+        }
+
+        function persistState() {
+            clearTimeout(persistTimer);
+            persistTimer = setTimeout(() => {
+                const snapshot = {
+                    v: 1,
+                    view: currentView,
+                    order: images.map(i => i.id),
+                    rankingMode, matchQueue, matchIndex, voteHistory, mergeSortState, recheckRounds,
+                    mergeRanks: Object.fromEntries(images.filter(i => i.mergeRank != null).map(i => [i.id, i.mergeRank])),
+                    sharedPrompt, sharedPromptEdited, currentRunLogged,
+                    showMetaDuringVote, compareLayoutMode, imageFitMode, syncLoupeEnabled, loupeZoom
+                };
+                idbRun('state', 'readwrite', s => s.put(snapshot, 'current')).catch(warnPersistFailure);
+            }, 150);
+        }
+
+        function clearSavedSession() {
+            clearTimeout(persistTimer);
+            Promise.all([
+                idbRun('images', 'readwrite', s => s.clear()),
+                idbRun('state', 'readwrite', s => s.clear())
+            ]).catch(err => console.warn('Could not clear saved session:', err));
+        }
+
+        async function restoreSession() {
+            let records, st;
+            try {
+                [records, st] = await Promise.all([
+                    idbRun('images', 'readonly', s => s.getAll()),
+                    idbRun('state', 'readonly', s => s.get('current'))
+                ]);
+            } catch (err) {
+                console.warn('No saved session available:', err);
+                return;
+            }
+            if (!records || !records.length || images.length) return;
+
+            const byId = Object.fromEntries(records.map(r => [r.id, r]));
+            const order = ((st && st.order) || []).filter(id => byId[id]);
+            records.sort((a, b) => (a.seq || 0) - (b.seq || 0)).forEach(r => { if (!order.includes(r.id)) order.push(r.id); });
+
+            images = order.map(id => {
+                const r = byId[id];
+                return {
+                    id: r.id, seq: r.seq || 0, filename: r.filename,
+                    url: r.blob ? URL.createObjectURL(r.blob) : r.dataUrl,
+                    width: r.width, height: r.height, size: r.size, meta: r.meta,
+                    wins: 0, losses: 0, ties: 0, matches: 0, headToHead: {},
+                    mergeRank: st && st.mergeRanks && st.mergeRanks[id] != null ? st.mergeRanks[id] : null
+                };
+            });
+            imageSeq = Math.max(0, ...images.map(i => i.seq)) + 1;
+
+            if (st) {
+                rankingMode = st.rankingMode || 'roundrobin';
+                matchQueue = st.matchQueue || [];
+                matchIndex = st.matchIndex || 0;
+                voteHistory = st.voteHistory || [];
+                mergeSortState = st.mergeSortState || null;
+                recheckRounds = st.recheckRounds || 0;
+                sharedPrompt = st.sharedPrompt || '';
+                sharedPromptEdited = !!st.sharedPromptEdited;
+                currentRunLogged = !!st.currentRunLogged;
+                showMetaDuringVote = !!st.showMetaDuringVote;
+                compareLayoutMode = st.compareLayoutMode || 'sidebyside';
+                imageFitMode = st.imageFitMode || 'fillwidth';
+                syncLoupeEnabled = !!st.syncLoupeEnabled;
+                loupeZoom = st.loupeZoom || 3;
+                const radio = document.querySelector(`input[name="rankMode"][value="${rankingMode}"]`);
+                if (radio) radio.checked = true;
+            }
+
+            recomputeStats();
+            syncToggleLabels();
+            renderGallery();
+            updateComparisonEstimate();
+            setNavAvailability();
+
+            const started = matchQueue.length > 0 || !!mergeSortState;
+            const view = st && st.view;
+            if (view === 'results' && isRankingFinished()) {
+                initSharedPrompt();
+                renderResultsView();
+                switchView('results');
+            } else if ((view === 'compare' || view === 'results') && started) {
+                switchView('compare');
+                renderCurrentMatch();
+            } else {
+                switchView('gallery');
+            }
+            const progress = started && !isRankingFinished() && rankingMode === 'roundrobin' ? ` (round ${matchIndex + 1} of ${matchQueue.length})` : '';
+            showToast(`Restored your last batch: ${images.length} images${progress}.`, 'info');
+        }
+
+        function getImageDimensions(url) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve({ width: img.naturalWidth, height: img.naturalHeight });
+                img.onerror = () => resolve({ width: 0, height: 0 });
+                img.src = url;
+            });
+        }
+
+        /**
+         * Reads binary PNG chunks (tEXt / iTXt) to extract ComfyUI "prompt" & "workflow" JSON,
+         * or Automatic1111 "parameters" string.
+         */
+        async function extractImageMetadata(file, dimensions) {
+            const defaultMeta = {
+                model: 'Not detected',
+                seed: '—',
+                steps: '—',
+                cfg: '—',
+                sampler: '—',
+                scheduler: '—',
+                denoise: '—',
+                noiseAugSeed: null,
+                noiseAugStrength: null,
+                loras: [],
+                resolution: dimensions.width ? `${dimensions.width} × ${dimensions.height}` : '—',
+                prompt: '',
+                rawPromptJson: null
+            };
+
+            try {
+                const buffer = await file.arrayBuffer();
+                const view = new DataView(buffer);
+
+                // Verify PNG signature: 89 50 4E 47 0D 0A 1A 0A
+                if (view.byteLength < 8 || view.getUint32(0) !== 0x89504E47 || view.getUint32(4) !== 0x0D0A1A0A) {
+                    return defaultMeta;
+                }
+
+                let offset = 8;
+                const textChunks = {};
+                const decoder = new TextDecoder('utf-8');
+
+                while (offset + 8 <= view.byteLength) {
+                    const length = view.getUint32(offset);
+                    const typeBytes = new Uint8Array(buffer, offset + 4, 4);
+                    const type = String.fromCharCode(...typeBytes);
+                    const dataStart = offset + 8;
+
+                    if (dataStart + length > view.byteLength) break;
+
+                    if (type === 'tEXt') {
+                        const chunkData = new Uint8Array(buffer, dataStart, length);
+                        const nullIndex = chunkData.indexOf(0);
+                        if (nullIndex !== -1) {
+                            const keyword = decoder.decode(chunkData.slice(0, nullIndex));
+                            const text = decoder.decode(chunkData.slice(nullIndex + 1));
+                            textChunks[keyword] = text;
+                        }
+                    } else if (type === 'iTXt') {
+                        const chunkData = new Uint8Array(buffer, dataStart, length);
+                        const nullIndex = chunkData.indexOf(0);
+                        if (nullIndex !== -1) {
+                            const keyword = decoder.decode(chunkData.slice(0, nullIndex));
+                            // Skip compression flag (1), compression method (1), language tag (null-term), translated keyword (null-term)
+                            let pos = nullIndex + 3;
+                            while (pos < chunkData.length && chunkData[pos] !== 0) pos++;
+                            pos++;
+                            while (pos < chunkData.length && chunkData[pos] !== 0) pos++;
+                            pos++;
+                            if (pos < chunkData.length) {
+                                const text = decoder.decode(chunkData.slice(pos));
+                                textChunks[keyword] = text;
+                            }
+                        }
+                    }
+
+                    if (type === 'IEND') break;
+                    offset += 12 + length; // 4 length + 4 type + length + 4 CRC
+                }
+
+                // Parse ComfyUI 'prompt' chunk if present
+                if (textChunks.prompt) {
+                    defaultMeta.rawPromptJson = textChunks.prompt;
+                    // Replace NaN or Infinity if any non-standard JSON tokens exist from Python
+                    const sanitized = textChunks.prompt.replace(/\bNaN\b/g, 'null');
+                    const promptObj = JSON.parse(sanitized);
+                    parseComfyPromptGraph(promptObj, defaultMeta);
+                } else if (textChunks.parameters) {
+                    // Fallback for A1111 / Forge style parameters text
+                    defaultMeta.rawPromptJson = textChunks.parameters;
+                    parseA1111Parameters(textChunks.parameters, defaultMeta);
+                } else if (textChunks.workflow) {
+                    defaultMeta.rawPromptJson = textChunks.workflow;
+                }
+            } catch (err) {
+                console.warn('Metadata parsing error for', file.name, err);
+            }
+
+            return defaultMeta;
+        }
+
+        /**
+         * Traverses ComfyUI's prompt execution dictionary to extract:
+         * - Diffusion Model / UNet / Checkpoint
+         * - KSampler / Seed Pixaroma parameters
+         * - Power Lora Loader (rgthree) or standard LoraLoader weights
+         * - ImageNoiseAugmentation seed & strength
+         */
+        function parseComfyPromptGraph(promptObj, meta) {
+            if (!promptObj || typeof promptObj !== 'object') return;
+
+            for (const [nodeId, node] of Object.entries(promptObj)) {
+                if (!node || typeof node !== 'object') continue;
+                const classType = String(node.class_type || '');
+                const inputs = node.inputs || {};
+
+                // 1. Model / UNet / Checkpoint
+                if (inputs.unet_name && meta.model === 'Not detected') {
+                    meta.model = cleanPathName(inputs.unet_name);
+                } else if (inputs.ckpt_name && meta.model === 'Not detected') {
+                    meta.model = cleanPathName(inputs.ckpt_name);
+                } else if (inputs.model_name && classType.toLowerCase().includes('model') && !classType.toLowerCase().includes('upscale')) {
+                    meta.model = cleanPathName(inputs.model_name);
+                }
+
+                // 2. KSampler or Custom Sampler
+                if (classType.includes('KSampler') || classType.includes('SamplerCustom')) {
+                    if (inputs.seed !== undefined && !Array.isArray(inputs.seed)) meta.seed = String(inputs.seed);
+                    if (inputs.noise_seed !== undefined && !Array.isArray(inputs.noise_seed)) meta.seed = String(inputs.noise_seed);
+                    if (inputs.steps !== undefined && !Array.isArray(inputs.steps)) meta.steps = String(inputs.steps);
+                    if (inputs.cfg !== undefined && !Array.isArray(inputs.cfg)) meta.cfg = String(inputs.cfg);
+                    if (inputs.sampler_name !== undefined && !Array.isArray(inputs.sampler_name)) meta.sampler = String(inputs.sampler_name);
+                    if (inputs.scheduler !== undefined && !Array.isArray(inputs.scheduler)) meta.scheduler = String(inputs.scheduler);
+                    if (inputs.denoise !== undefined && !Array.isArray(inputs.denoise)) meta.denoise = String(inputs.denoise);
+                }
+
+                // 3. Dedicated Seed nodes (e.g., Seed Pixaroma / rgthree Seed)
+                if ((classType.toLowerCase().includes('seed') || inputs.seed !== undefined) && meta.seed === '—') {
+                    if (typeof inputs.seed === 'number' || typeof inputs.seed === 'string') {
+                        meta.seed = String(inputs.seed);
+                    }
+                }
+
+                // 4. Image Noise Augmentation (comfyui-kjnodes)
+                if (classType.includes('ImageNoiseAugmentation') || inputs.noise_aug_strength !== undefined) {
+                    if (inputs.noise_aug_strength !== undefined) meta.noiseAugStrength = inputs.noise_aug_strength;
+                    if (inputs.seed !== undefined && !Array.isArray(inputs.seed)) meta.noiseAugSeed = String(inputs.seed);
+                }
+
+                // 5. Power Lora Loader (rgthree) or standard LoraLoader
+                if (classType.includes('Power Lora Loader')) {
+                    for (const [key, val] of Object.entries(inputs)) {
+                        if (key.startsWith('lora_') && val && typeof val === 'object' && val.on && val.lora) {
+                            meta.loras.push(`${cleanPathName(val.lora)} (${val.strength ?? 1.0})`);
+                        }
+                    }
+                } else if (classType.includes('LoraLoader') && inputs.lora_name) {
+                    const strength = inputs.strength_model !== undefined ? inputs.strength_model : 1.0;
+                    meta.loras.push(`${cleanPathName(inputs.lora_name)} (${strength})`);
+                }
+
+                // 6. Split sampler graphs (SamplerCustomAdvanced): RandomNoise seed, BasicScheduler steps/denoise
+                if (isScalar(inputs.noise_seed) && meta.seed === '—') meta.seed = String(inputs.noise_seed);
+                if (classType.includes('Scheduler') && !classType.includes('KSampler')) {
+                    if (isScalar(inputs.steps) && meta.steps === '—') meta.steps = String(inputs.steps);
+                    if (isScalar(inputs.denoise) && meta.denoise === '—') meta.denoise = String(inputs.denoise);
+                    if (isScalar(inputs.scheduler) && meta.scheduler === '—') meta.scheduler = String(inputs.scheduler);
+                }
+            }
+
+            // 7. Positive input prompt, traced from the sampler / guider back to its text node
+            meta.prompt = extractPositivePrompt(promptObj);
+        }
+
+        // --- PROMPT EXTRACTION FROM THE COMFYUI GRAPH ---
+        const PROMPT_KEYS = ['text', 'text_g', 't5xxl', 'clip_l', 'prompt', 'positive_prompt', 'text_positive', 'positive', 'populated_text', 'wildcard_text', 'string', 'value', 'text_l'];
+        const SKIP_TRACE_KEYS = new Set(['clip', 'model', 'vae', 'image', 'images', 'latent', 'latent_image', 'samples', 'pixels', 'mask', 'control_net', 'negative', 'noise', 'sampler', 'sigmas', 'guider']);
+
+        function isScalar(v) { return typeof v === 'number' || typeof v === 'string'; }
+        function isLinkVal(v) {
+            return Array.isArray(v) && v.length === 2 && (typeof v[0] === 'string' || typeof v[0] === 'number') && typeof v[1] === 'number';
+        }
+        function traceTextFrom(promptObj, link, depth, seen) {
+            const id = String(link[0]);
+            if (depth > 8 || seen.has(id)) return '';
+            seen.add(id);
+            const node = promptObj[id];
+            if (!node || !node.inputs) return '';
+            for (const k of PROMPT_KEYS) {
+                const v = node.inputs[k];
+                if (typeof v === 'string' && v.trim()) return v.trim();
+                if (isLinkVal(v)) { const r = traceTextFrom(promptObj, v, depth + 1, seen); if (r) return r; }
+            }
+            for (const [k, v] of Object.entries(node.inputs)) {
+                if (SKIP_TRACE_KEYS.has(k) || !isLinkVal(v)) continue;
+                const r = traceTextFrom(promptObj, v, depth + 1, seen);
+                if (r) return r;
+            }
+            return '';
+        }
+        function extractPositivePrompt(promptObj) {
+            const nodes = Object.values(promptObj).filter(n => n && typeof n === 'object' && n.inputs);
+            // Preferred: follow the sampler's / guider's positive conditioning back to the text encoder
+            for (const n of nodes) {
+                if (!/sampler|guider/i.test(String(n.class_type || ''))) continue;
+                for (const k of ['positive', 'conditioning']) {
+                    if (isLinkVal(n.inputs[k])) {
+                        const r = traceTextFrom(promptObj, n.inputs[k], 0, new Set());
+                        if (r) return r;
+                    }
+                }
+            }
+            // Fallback: the longest text on a text-encode / prompt node that isn't titled as negative
+            let best = '';
+            for (const n of nodes) {
+                const title = String((n._meta && n._meta.title) || '');
+                if (/neg/i.test(title) || !/encode|prompt|text/i.test(String(n.class_type || ''))) continue;
+                for (const k of PROMPT_KEYS) {
+                    const v = n.inputs[k];
+                    if (typeof v === 'string' && v.length > best.length) best = v;
+                }
+            }
+            return best.trim();
+        }
+
+        function parseA1111Parameters(paramText, meta) {
+            const seedMatch = paramText.match(/Seed:\s*(\d+)/i);
+            const stepsMatch = paramText.match(/Steps:\s*(\d+)/i);
+            const cfgMatch = paramText.match(/CFG scale:\s*([\d.]+)/i);
+            const samplerMatch = paramText.match(/Sampler:\s*([^,\n]+)/i);
+            const modelMatch = paramText.match(/Model:\s*([^,\n]+)/i);
+
+            if (seedMatch) meta.seed = seedMatch[1];
+            if (stepsMatch) meta.steps = stepsMatch[1];
+            if (cfgMatch) meta.cfg = cfgMatch[1];
+            if (samplerMatch) meta.sampler = samplerMatch[1].trim();
+            if (modelMatch) meta.model = modelMatch[1].trim();
+            const denoiseMatch = paramText.match(/Denoising strength:\s*([\d.]+)/i);
+            if (denoiseMatch) meta.denoise = denoiseMatch[1];
+
+            const lines = paramText.split('\n');
+            const stop = lines.findIndex(l => /^Negative prompt:/i.test(l.trim()) || /^Steps:\s*\d/i.test(l.trim()));
+            meta.prompt = lines.slice(0, stop < 0 ? lines.length : stop).join('\n').trim();
+        }
+
+        function cleanPathName(rawPath) {
+            if (!rawPath) return '';
+            return String(rawPath).split(/[\\/]/).pop().replace(/\.safetensors$/i, '');
+        }
+
+        // --- GALLERY RENDERING ---
+        function renderGallery() {
+            const grid = document.getElementById('galleryGrid');
+            const emptyState = document.getElementById('galleryEmptyState');
+            const startBtn = document.getElementById('startRankingBtn');
+            const clearSubBtn = document.getElementById('clearGallerySubBtn');
+            const batchBadge = document.getElementById('batchCountBadge');
+            const statsPill = document.getElementById('galleryStatsPill');
+
+            statsPill.textContent = `${images.length} loaded`;
+            if (images.length > 0) {
+                batchBadge.textContent = `${images.length} images`;
+                batchBadge.classList.remove('hidden');
+                emptyState.classList.add('hidden');
+                grid.classList.remove('hidden');
+                clearSubBtn.disabled = false;
+            } else {
+                batchBadge.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                grid.classList.add('hidden');
+                clearSubBtn.disabled = true;
+            }
+
+            startBtn.disabled = images.length < 2;
+
+            grid.innerHTML = images.map((img, idx) => `
+                <div class="bg-comfy-card border border-comfy-border rounded-xl overflow-hidden flex flex-col group hover:border-gray-500 transition shadow">
+                    <div class="relative aspect-video bg-black/70 flex items-center justify-center overflow-hidden">
+                        <img src="${img.url}" alt="${escapeHtml(img.filename)}" class="w-full h-full object-contain group-hover:scale-105 transition duration-200">
+                        <div class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/75 border border-white/10 font-mono text-[11px] text-gray-200">
+                            #${idx + 1}
+                        </div>
+                        <div class="absolute bottom-2 right-2 px-1.5 py-0.5 rounded bg-black/75 font-mono text-[10px] text-gray-300">
+                            ${escapeHtml(img.meta.resolution)}
+                        </div>
+                        <div class="absolute top-2 right-2 flex items-center gap-1">
+                            <button onclick="openMetadataModal('${img.id}')" class="w-7 h-7 rounded-lg bg-black/75 hover:bg-comfy-blue text-white flex items-center justify-center text-xs transition cursor-pointer" title="View ComfyUI Metadata">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </button>
+                            <button onclick="removeSingleImage('${img.id}')" class="w-7 h-7 rounded-lg bg-black/75 hover:bg-red-500 text-gray-300 hover:text-white flex items-center justify-center text-xs transition cursor-pointer" title="Remove from batch">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-3 flex-1 flex flex-col justify-between text-xs">
+                        <div>
+                            <div class="font-mono font-semibold text-white truncate mb-1" title="${escapeHtml(img.filename)}">
+                                ${escapeHtml(img.filename)}
+                            </div>
+                            <div class="text-[11px] text-gray-400 font-mono space-y-0.5">
+                                <div class="truncate"><span class="text-gray-500">Model:</span> <span class="text-gray-300">${escapeHtml(img.meta.model)}</span></div>
+                                <div class="truncate"><span class="text-gray-500">Seed:</span> <span class="text-amber-400">${escapeHtml(img.meta.seed)}</span></div>
+                                ${img.meta.noiseAugStrength !== null ? `<div class="truncate"><span class="text-gray-500">NoiseAug:</span> <span class="text-emerald-400">${img.meta.noiseAugStrength}</span></div>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function removeSingleImage(id) {
+            const idx = images.findIndex(i => i.id === id);
+            if (idx !== -1) {
+                URL.revokeObjectURL(images[idx].url);
+                images.splice(idx, 1);
+                idbRun('images', 'readwrite', s => s.delete(id)).catch(warnPersistFailure);
+                resetRankingIfAny();
+                renderGallery();
+                updateComparisonEstimate();
+                persistState();
+            }
+        }
+
+        function clearGallery() {
+            if (images.length === 0 && currentView === 'gallery') {
+                showToast('Gallery is already empty.', 'info');
+                return;
+            }
+            images.forEach(img => {
+                if (img.url && img.url.startsWith('blob:')) {
+                    URL.revokeObjectURL(img.url);
+                }
+            });
+            images = [];
+            matchQueue = [];
+            matchIndex = 0;
+            voteHistory = [];
+            mergeSortState = null;
+            sharedPrompt = '';
+            sharedPromptEdited = false;
+            currentRunLogged = false;
+            recheckRounds = 0;
+            clearSavedSession();
+
+            document.getElementById('navCompareBtn').disabled = true;
+            document.getElementById('navCompareBtn').className = 'px-3 py-1.5 rounded-md transition flex items-center gap-1.5 text-gray-500 cursor-not-allowed';
+            document.getElementById('navResultsBtn').disabled = true;
+            document.getElementById('navResultsBtn').className = 'px-3 py-1.5 rounded-md transition flex items-center gap-1.5 text-gray-500 cursor-not-allowed';
+
+            renderGallery();
+            updateComparisonEstimate();
+            switchView('gallery');
+            showToast('Gallery cleared! Ready for your next image batch.', 'info');
+        }
+
+        function updateComparisonEstimate() {
+            const modeRadio = document.querySelector('input[name="rankMode"]:checked');
+            rankingMode = modeRadio ? modeRadio.value : 'roundrobin';
+            const n = images.length;
+            const estEl = document.getElementById('estComparisonsText');
+
+            if (n < 2) {
+                estEl.textContent = '0 rounds';
+                return;
+            }
+
+            if (rankingMode === 'roundrobin') {
+                const total = (n * (n - 1)) / 2;
+                estEl.textContent = `${total} rounds (exact)`;
+            } else {
+                const approx = Math.max(1, Math.ceil(n * Math.log2(n) - n + 1));
+                estEl.textContent = `~${approx} rounds (fast)`;
+            }
+        }
+
+        // --- START PAIRWISE RANKING ---
+        function startRanking() {
+            if (images.length < 2) {
+                showToast('Add at least 2 images to start comparing.', 'error');
+                return;
+            }
+
+            // Reset scores
+            images.forEach(img => { img.mergeRank = null; });
+            voteHistory = [];
+            recomputeStats();
+            currentRunLogged = false;
+            peekingSpecs = false;
+            recheckRounds = 0;
+            mergeSortState = null;
+            matchQueue = [];
+            matchIndex = 0;
+
+            const modeRadio = document.querySelector('input[name="rankMode"]:checked');
+            rankingMode = modeRadio ? modeRadio.value : 'roundrobin';
+
+            if (rankingMode === 'roundrobin') {
+                // Generate all N*(N-1)/2 unique pairs and shuffle them
+                matchQueue = [];
+                for (let i = 0; i < images.length; i++) {
+                    for (let j = i + 1; j < images.length; j++) {
+                        // Randomly assign left/right side to prevent position bias
+                        if (Math.random() < 0.5) {
+                            matchQueue.push({ leftId: images[i].id, rightId: images[j].id });
+                        } else {
+                            matchQueue.push({ leftId: images[j].id, rightId: images[i].id });
+                        }
+                    }
+                }
+                shuffleArray(matchQueue);
+                matchIndex = 0;
+            } else {
+                // Initialize interactive Merge-Sort state
+                initMergeSort();
+            }
+
+            document.getElementById('navCompareBtn').disabled = false;
+            document.getElementById('navResultsBtn').disabled = true;
+            switchView('compare');
+            renderCurrentMatch();
+            persistState();
+        }
+
+        // --- INTERACTIVE MERGE SORT IMPLEMENTATION ---
+        function initMergeSort() {
+            const ids = images.map(i => i.id);
+            shuffleArray(ids);
+            mergeSortState = {
+                lists: ids.map(id => [id]),
+                nextLists: [],
+                leftRun: null,
+                rightRun: null,
+                mergedRun: [],
+                i: 0,
+                j: 0,
+                comparisonsDone: 0,
+                estimatedTotal: Math.max(1, Math.ceil(ids.length * Math.log2(ids.length) - ids.length + 1))
+            };
+            advanceMergeSort();
+        }
+
+        function advanceMergeSort() {
+            const st = mergeSortState;
+            while (true) {
+                if (st.leftRun && st.rightRun) {
+                    if (st.i < st.leftRun.length && st.j < st.rightRun.length) {
+                        // Need user comparison between st.leftRun[st.i] and st.rightRun[st.j]
+                        return { leftId: st.leftRun[st.i], rightId: st.rightRun[st.j], done: false };
+                    } else {
+                        while (st.i < st.leftRun.length) st.mergedRun.push(st.leftRun[st.i++]);
+                        while (st.j < st.rightRun.length) st.mergedRun.push(st.rightRun[st.j++]);
+                        st.nextLists.push(st.mergedRun);
+                        st.leftRun = null;
+                        st.rightRun = null;
+                        st.mergedRun = [];
+                    }
+                } else if (st.lists.length >= 2) {
+                    st.leftRun = st.lists.shift();
+                    st.rightRun = st.lists.shift();
+                    st.mergedRun = [];
+                    st.i = 0;
+                    st.j = 0;
+                } else {
+                    if (st.lists.length === 1) {
+                        st.nextLists.push(st.lists.shift());
+                    }
+                    if (st.nextLists.length <= 1) {
+                        // Sorting complete! Store the final sorted position (real W/L counts stay intact for the Rank Score)
+                        const finalOrder = st.nextLists[0] || [];
+                        finalOrder.forEach((id, rankIdx) => {
+                            const img = images.find(x => x.id === id);
+                            if (img) img.mergeRank = rankIdx;
+                        });
+                        return { done: true };
+                    }
+                    st.lists = st.nextLists;
+                    st.nextLists = [];
+                }
+            }
+        }
+
+        // --- RENDER ACTIVE PAIRWISE MATCH ---
+        function renderCurrentMatch() {
+            let leftId, rightId, currentNum, totalNum;
+
+            if (rankingMode === 'roundrobin') {
+                if (matchIndex >= matchQueue.length) {
+                    finishRanking();
+                    return;
+                }
+                const pair = matchQueue[matchIndex];
+                leftId = pair.leftId;
+                rightId = pair.rightId;
+                currentNum = matchIndex + 1;
+                totalNum = matchQueue.length;
+            } else {
+                const step = advanceMergeSort();
+                if (step.done) {
+                    finishRanking();
+                    return;
+                }
+                leftId = step.leftId;
+                rightId = step.rightId;
+                currentNum = mergeSortState.comparisonsDone + 1;
+                totalNum = Math.max(currentNum, mergeSortState.estimatedTotal);
+            }
+
+            const leftImgObj = images.find(i => i.id === leftId);
+            const rightImgObj = images.find(i => i.id === rightId);
+            if (!leftImgObj || !rightImgObj) {
+                // Saved progress points at an image that no longer exists: start over cleanly
+                resetRankingIfAny();
+                switchView('gallery');
+                return;
+            }
+            currentPair = { left: leftImgObj, right: rightImgObj };
+            document.getElementById('recheckBadge').classList.toggle('hidden',
+                !(rankingMode === 'roundrobin' && matchQueue[matchIndex] && matchQueue[matchIndex].recheck));
+
+            // Update Progress Bar
+            const pct = Math.min(100, Math.round(((currentNum - 1) / totalNum) * 100));
+            document.getElementById('currentRoundNum').textContent = currentNum;
+            document.getElementById('totalRoundNum').textContent = totalNum;
+            document.getElementById('progressPercentText').textContent = `${pct}%`;
+            document.getElementById('progressBarFill').style.width = `${pct}%`;
+            document.getElementById('undoVoteBtn').disabled = voteHistory.length === 0;
+
+            // Populate Left & Right Cards
+            document.getElementById('leftImg').src = leftImgObj.url;
+            document.getElementById('rightImg').src = rightImgObj.url;
+
+            document.getElementById('leftDimBadge').textContent = leftImgObj.meta.resolution || '';
+            document.getElementById('rightDimBadge').textContent = rightImgObj.meta.resolution || '';
+
+            applyArenaSizingAndLayout();
+            updateBlindVisibility();
+            hideLoupes();
+        }
+
+        // Shows or hides filenames, model names and specs. Visible when Blind Mode is OFF or while Space is held.
+        function updateBlindVisibility() {
+            const visible = showMetaDuringVote || peekingSpecs;
+            const indicator = document.getElementById('peekIndicator');
+            if (indicator) indicator.classList.toggle('hidden', !(peekingSpecs && !showMetaDuringVote));
+            if (!currentPair.left || !currentPair.right) return;
+            ['left', 'right'].forEach(side => {
+                const img = currentPair[side];
+                document.getElementById(side + 'Filename').textContent = visible ? img.filename : 'Hidden (Blind Mode)';
+                const bar = document.getElementById(side + 'MetaBar');
+                bar.classList.toggle('hidden', !visible);
+                bar.innerHTML = visible ? formatCompactMetaBar(img) : '';
+                document.getElementById(side + 'SpecsBtn').classList.toggle('hidden', !visible);
+            });
+        }
+
+        function cycleLayoutMode() {
+            compareLayoutMode = compareLayoutMode === 'sidebyside' ? 'stacked' : 'sidebyside';
+            syncToggleLabels();
+            applyArenaSizingAndLayout();
+            hideLoupes();
+            persistState();
+        }
+
+        function toggleImageFitMode() {
+            imageFitMode = imageFitMode === 'fillwidth' ? 'fitscreen' : 'fillwidth';
+            syncToggleLabels();
+            applyArenaSizingAndLayout();
+            hideLoupes();
+            persistState();
+        }
+
+        // Keeps every toggle button's label in line with the current settings (also used after a restore)
+        function syncToggleLabels() {
+            document.getElementById('layoutModeText').textContent =
+                compareLayoutMode === 'sidebyside' ? 'Side-by-Side (Wide)' : 'Stacked (Top/Bottom)';
+            document.getElementById('fitModeText').textContent =
+                imageFitMode === 'fillwidth' ? 'Fill Card Width' : 'Fit Screen Height';
+            document.getElementById('loupeStateText').textContent =
+                syncLoupeEnabled ? `ON · ${loupeZoom.toFixed(1).replace(/\.0$/, '')}×` : 'OFF';
+            document.getElementById('toggleLoupeBtn').classList.toggle('border-comfy-blue', syncLoupeEnabled);
+            document.getElementById('toggleLoupeBtn').classList.toggle('border-comfy-border', !syncLoupeEnabled);
+            document.getElementById('loupeHint').classList.toggle('hidden', !syncLoupeEnabled);
+            document.getElementById('compareGridContainer').classList.toggle('loupe-active', syncLoupeEnabled);
+            const blindOn = !showMetaDuringVote;
+            document.getElementById('blindStateText').textContent = blindOn ? 'ON' : 'OFF';
+            document.getElementById('blindStateIcon').className = `fa-solid ${blindOn ? 'fa-eye-slash' : 'fa-eye'} text-amber-400`;
+            document.getElementById('toggleMetaDuringVoteBtn').classList.toggle('border-amber-500/50', blindOn);
+            document.getElementById('toggleMetaDuringVoteBtn').classList.toggle('border-comfy-border', !blindOn);
+        }
+
+        function applyArenaSizingAndLayout() {
+            const grid = document.getElementById('compareGridContainer');
+            const leftImg = document.getElementById('leftImg');
+            const rightImg = document.getElementById('rightImg');
+
+            if (compareLayoutMode === 'stacked') {
+                grid.className = 'grid grid-cols-1 gap-4 items-start max-w-[96vw] mx-auto w-full';
+            } else {
+                grid.className = 'grid grid-cols-1 md:grid-cols-2 gap-3 items-start w-full';
+            }
+            grid.classList.toggle('loupe-active', syncLoupeEnabled);
+
+            // Fill Card Width: full card width at natural aspect ratio (capped at 84vh for tall portraits).
+            // Fit Screen Height: the whole card (and both cards when stacked) fits the window without scrolling.
+            let cap = '84vh';
+            if (imageFitMode === 'fitscreen') {
+                cap = compareLayoutMode === 'stacked' ? 'calc((100vh - 340px) / 2)' : 'calc(100vh - 290px)';
+            }
+            [leftImg, rightImg].forEach(img => {
+                img.className = 'w-full h-auto object-contain rounded transition duration-150 block';
+                img.style.maxHeight = cap;
+                img.style.minHeight = '120px';
+            });
+        }
+
+        function formatCompactMetaBar(img) {
+            const m = img.meta;
+            const badges = [
+                `<span class="px-2 py-0.5 rounded bg-comfy-bg border border-comfy-border text-gray-300"><strong class="text-gray-500">Model:</strong> ${escapeHtml(m.model)}</span>`,
+                `<span class="px-2 py-0.5 rounded bg-comfy-bg border border-comfy-border text-amber-400"><strong class="text-gray-500">Seed:</strong> ${escapeHtml(m.seed)}</span>`,
+                `<span class="px-2 py-0.5 rounded bg-comfy-bg border border-comfy-border text-gray-300"><strong class="text-gray-500">Steps/CFG:</strong> ${escapeHtml(m.steps)} / ${escapeHtml(m.cfg)}</span>`,
+                `<span class="px-2 py-0.5 rounded bg-comfy-bg border border-comfy-border text-gray-300"><strong class="text-gray-500">Sampler:</strong> ${escapeHtml(m.sampler)} (${escapeHtml(m.scheduler)})</span>`
+            ];
+            if (m.noiseAugStrength !== null) {
+                badges.push(`<span class="px-2 py-0.5 rounded bg-comfy-bg border border-comfy-border text-emerald-400"><strong class="text-gray-500">NoiseAug:</strong> ${escapeHtml(String(m.noiseAugStrength))}</span>`);
+            }
+            if (m.loras && m.loras.length > 0) {
+                badges.push(`<span class="px-2 py-0.5 rounded bg-comfy-bg border border-comfy-border text-purple-300"><strong class="text-gray-500">LoRAs:</strong> ${m.loras.length} active</span>`);
+            }
+            return `<div class="flex flex-wrap gap-1.5">${badges.join('')}</div>`;
+        }
+
+        // --- RECORD VOTE & UNDO ---
+        // side: 'left' | 'right' | 'tie'. A tie gives each image half a point.
+        function recordVote(side) {
+            if (currentView !== 'compare' || !currentPair.left || !currentPair.right) return;
+
+            const tie = side === 'tie';
+            const winner = side === 'right' ? currentPair.right : currentPair.left;
+            const loser = side === 'right' ? currentPair.left : currentPair.right;
+
+            if (rankingMode === 'roundrobin') {
+                voteHistory.push({ mode: 'roundrobin', matchIndex, winnerId: winner.id, loserId: loser.id, tie });
+                matchIndex++;
+            } else {
+                // Save deep snapshot of mergeSortState for undo
+                voteHistory.push({
+                    mode: 'mergesort',
+                    snapshot: JSON.parse(JSON.stringify(mergeSortState)),
+                    winnerId: winner.id, loserId: loser.id, tie
+                });
+                // A tie keeps the left image first; the sort needs an order to continue
+                if (side === 'right') {
+                    mergeSortState.mergedRun.push(mergeSortState.rightRun[mergeSortState.j++]);
+                } else {
+                    mergeSortState.mergedRun.push(mergeSortState.leftRun[mergeSortState.i++]);
+                }
+                mergeSortState.comparisonsDone++;
+            }
+
+            if (tie) {
+                const btn = document.getElementById('tieVoteBtn');
+                btn.classList.add('ring-2', 'ring-sky-400');
+                setTimeout(() => btn.classList.remove('ring-2', 'ring-sky-400'), 350);
+            }
+            recomputeStats();
+            renderCurrentMatch();
+            persistState();
+        }
+
+        function undoLastVote() {
+            if (voteHistory.length === 0) return;
+            const last = voteHistory.pop();
+
+            if (last.mode === 'roundrobin') {
+                matchIndex = last.matchIndex;
+            } else {
+                mergeSortState = last.snapshot;
+                images.forEach(i => { i.mergeRank = null; });
+            }
+
+            recomputeStats();
+            document.getElementById('navResultsBtn').disabled = true;
+            if (currentView !== 'compare') switchView('compare');
+            renderCurrentMatch();
+            persistState();
+            showToast(last.tie ? 'Undid last tie.' : 'Undid last comparison choice.', 'info');
+        }
+
+        // --- FINISH & RENDER TOP-3 RESULTS ---
+        function finishRanking() {
+            document.getElementById('progressBarFill').style.width = '100%';
+            document.getElementById('progressPercentText').textContent = '100%';
+            document.getElementById('navResultsBtn').disabled = false;
+            peekingSpecs = false;
+
+            initSharedPrompt();
+            renderResultsView();
+            switchView('results');
+            persistState();
+        }
+
+        function getSortedRankedImages() {
+            return [...images].sort((a, b) => {
+                if (rankingMode === 'mergesort' && a.mergeRank != null && b.mergeRank != null) return a.mergeRank - b.mergeRank;
+                if (points(b) !== points(a)) return points(b) - points(a);
+                // Direct head-to-head tie-breaker
+                if (a.headToHead[b.id] === 1) return -1;
+                if (b.headToHead[a.id] === 1) return 1;
+                return a.losses - b.losses;
+            });
+        }
+
+        function renderResultsView() {
+            const ranked = getSortedRankedImages();
+            const top3 = ranked.slice(0, 3);
+            const top3Grid = document.getElementById('top3Grid');
+            const fullList = document.getElementById('fullLeaderboardList');
+
+            const rankStyles = [
+                { badge: 'bg-amber-500 text-black', border: 'border-amber-500/70 shadow-[0_0_30px_rgba(245,158,11,0.15)]', icon: 'fa-crown', label: '1st Place Winner' },
+                { badge: 'bg-slate-300 text-black', border: 'border-slate-400/50', icon: 'fa-medal', label: '2nd Place Runner-Up' },
+                { badge: 'bg-amber-700 text-white', border: 'border-amber-700/60', icon: 'fa-award', label: '3rd Place Selected' }
+            ];
+
+            top3Grid.innerHTML = top3.map((img, idx) => {
+                const st = rankStyles[idx];
+                const winRate = winRatePct(img);
+                return `
+                    <div class="bg-comfy-panel border-2 ${st.border} rounded-2xl overflow-hidden flex flex-col justify-between">
+                        <div>
+                            <!-- Rank Header -->
+                            <div class="px-4 py-3 bg-comfy-card border-b border-comfy-border flex items-center justify-between">
+                                <span class="px-2.5 py-1 rounded-md font-bold text-xs flex items-center gap-1.5 ${st.badge}">
+                                    <i class="fa-solid ${st.icon}"></i> #${idx + 1} • ${st.label}
+                                </span>
+                                <span class="font-mono text-xs font-semibold text-emerald-400">
+                                    ${wlt(img)} (${winRate}%)
+                                </span>
+                            </div>
+
+                            <!-- Image Preview -->
+                            <div class="relative bg-black/80 flex items-center justify-center p-2 cursor-pointer group" onclick="openMetadataModal('${img.id}')">
+                                <img src="${img.url}" alt="${escapeHtml(img.filename)}" class="w-full h-auto max-h-[52vh] object-contain rounded group-hover:scale-[1.01] transition">
+                                <div class="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg bg-black/80 text-white text-xs opacity-0 group-hover:opacity-100 transition">
+                                    <i class="fa-solid fa-magnifying-glass-plus mr-1"></i>Inspect
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Filename & Metadata Summary -->
+                        <div class="p-4 bg-comfy-card/60 border-t border-comfy-border space-y-3">
+                            <div>
+                                <div class="text-[11px] uppercase tracking-wider text-gray-400 mb-1">Selected Filename</div>
+                                <div class="flex items-center gap-2 bg-comfy-bg border border-comfy-border rounded-lg p-2">
+                                    <span class="font-mono text-xs font-semibold text-white truncate flex-1" title="${escapeHtml(img.filename)}">
+                                        ${escapeHtml(img.filename)}
+                                    </span>
+                                    <button onclick="copyText('${escapeJs(img.filename)}', 'Copied filename!')" class="px-2.5 py-1 rounded bg-comfy-card hover:bg-comfy-blue text-gray-200 hover:text-white text-xs font-medium transition cursor-pointer shrink-0">
+                                        <i class="fa-regular fa-copy mr-1"></i>Copy
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Structured Top-3 Info (same fields as the exports) -->
+                            <dl class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1.5 text-[11px] font-mono bg-comfy-bg/70 p-2.5 rounded-lg border border-comfy-border">
+                                <dt class="text-gray-500">Rank Score</dt><dd class="text-emerald-400 font-semibold">${escapeHtml(formatRankScore(img, idx + 1))}</dd>
+                                <dt class="text-gray-500">Model</dt><dd class="text-gray-200 break-words">${escapeHtml(img.meta.model)}</dd>
+                                <dt class="text-gray-500">Seed</dt><dd class="text-amber-400 break-all">${escapeHtml(img.meta.seed)}</dd>
+                                <dt class="text-gray-500">Sampler</dt><dd class="text-gray-200">${escapeHtml(img.meta.sampler)}</dd>
+                                <dt class="text-gray-500">Steps</dt><dd class="text-gray-200">${escapeHtml(img.meta.steps)}</dd>
+                                ${hasValue(img.meta.denoise) ? `<dt class="text-gray-500">Denoise</dt><dd class="text-gray-200">${escapeHtml(img.meta.denoise)}</dd>` : ''}
+                            </dl>
+                            <div>
+                                <div class="text-[11px] uppercase tracking-wider text-gray-400 mb-1">Input Prompt</div>
+                                <p class="top3-prompt text-[11px] font-mono text-gray-300 bg-comfy-bg/70 border border-comfy-border rounded-lg p-2.5 max-h-28 overflow-y-auto whitespace-pre-wrap break-words" data-fallback="${escapeHtml(img.meta.prompt || '')}"></p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Complete Leaderboard Table
+            fullList.innerHTML = ranked.map((img, idx) => {
+                const winRate = winRatePct(img);
+                const isTop3 = idx < 3;
+                return `
+                    <div class="p-3 rounded-xl bg-comfy-card border ${isTop3 ? 'border-comfy-blue/40' : 'border-comfy-border'} flex flex-wrap sm:flex-nowrap items-center justify-between gap-3">
+                        <div class="flex items-center gap-3 min-w-0 flex-1">
+                            <div class="w-8 h-8 rounded-lg ${isTop3 ? 'bg-comfy-blue text-white' : 'bg-comfy-bg text-gray-400'} font-mono font-bold text-xs flex items-center justify-center shrink-0">
+                                #${idx + 1}
+                            </div>
+                            <img src="${img.url}" onclick="openMetadataModal('${img.id}')" class="w-12 h-12 rounded-lg object-cover bg-black cursor-pointer shrink-0 border border-comfy-border hover:opacity-80 transition">
+                            <div class="min-w-0 flex-1">
+                                <div class="font-mono text-xs sm:text-sm font-semibold text-white truncate" title="${escapeHtml(img.filename)}">
+                                    ${escapeHtml(img.filename)}
+                                </div>
+                                <div class="text-xs font-mono text-gray-400 flex flex-wrap gap-x-3 gap-y-0.5 mt-0.5">
+                                    <span>Seed: <strong class="text-amber-400">${escapeHtml(img.meta.seed)}</strong></span>
+                                    <span>Sampler: <strong class="text-gray-300">${escapeHtml(img.meta.sampler)}</strong></span>
+                                    ${img.meta.noiseAugStrength !== null ? `<span>NoiseAug: <strong class="text-emerald-400">${img.meta.noiseAugStrength}</strong></span>` : ''}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 shrink-0">
+                            <div class="text-right font-mono text-xs">
+                                <div class="font-bold text-emerald-400">${img.wins} Wins <span class="text-gray-500 font-normal">/ ${img.losses} Losses${img.ties ? ` / ${img.ties} Ties` : ''}</span></div>
+                                <div class="text-[11px] text-gray-400">${winRate}% win rate</div>
+                            </div>
+                            <button onclick="copyText('${escapeJs(img.filename)}', 'Copied filename!')" class="px-2.5 py-1.5 rounded-lg bg-comfy-bg hover:bg-gray-700 text-gray-300 border border-comfy-border text-xs transition cursor-pointer" title="Copy Filename">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                            <button onclick="openMetadataModal('${img.id}')" class="px-2.5 py-1.5 rounded-lg bg-comfy-bg hover:bg-gray-700 text-gray-300 border border-comfy-border text-xs transition cursor-pointer" title="Inspect Specs">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            updateTop3PromptDisplays();
+            renderConsistencyPanel();
+            renderModelBreakdown(ranked);
+            renderAllTimeLeaderboard();
+        }
+
+        // --- RANK SCORE, SHARED PROMPT & TOP-3 EXPORTS ---
+        function hasValue(v) {
+            return v !== null && v !== undefined && String(v).trim() !== '' && String(v).trim() !== '—';
+        }
+
+        function formatRankScore(img, rank) {
+            const pct = img.matches > 0 ? `${winRatePct(img)}%` : '—';
+            return `#${rank} (${wlt(img)}, ${pct})`;
+        }
+
+        function initSharedPrompt() {
+            const found = images.map(i => (i.meta.prompt || '').trim()).filter(Boolean);
+            const counts = {};
+            found.forEach(p => counts[p] = (counts[p] || 0) + 1);
+            const distinct = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
+            if (!sharedPromptEdited) sharedPrompt = distinct[0] || '';
+
+            const src = document.getElementById('sharedPromptSource');
+            if (sharedPromptEdited) src.textContent = 'Edited. Your text is used in all exports.';
+            else if (!found.length) src.textContent = 'No prompt found in the image metadata.';
+            else if (distinct.length === 1) src.textContent = `Auto-extracted from ${found.length} of ${images.length} PNG graphs. Click to edit.`;
+            else src.textContent = `${distinct.length} different prompts in this batch. Showing the most common one (${counts[distinct[0]]} images).`;
+            document.getElementById('sharedPromptInput').value = sharedPrompt;
+        }
+
+        function onSharedPromptInput(value) {
+            sharedPrompt = value;
+            sharedPromptEdited = true;
+            document.getElementById('sharedPromptSource').textContent = 'Edited. Your text is used in all exports.';
+            updateTop3PromptDisplays();
+            persistState();
+        }
+
+        function updateTop3PromptDisplays() {
+            document.querySelectorAll('.top3-prompt').forEach(el => {
+                const text = sharedPrompt.trim() || el.dataset.fallback || '';
+                el.textContent = text || 'Not found in metadata. Add it in the Shared Input Prompt box above.';
+                el.classList.toggle('text-gray-500', !text);
+                el.classList.toggle('italic', !text);
+            });
+        }
+
+        function getTop3Report() {
+            return getSortedRankedImages().slice(0, 3).map((img, idx) => ({
+                rank: idx + 1,
+                filename: img.filename,
+                score: formatRankScore(img, idx + 1),
+                model: img.meta.model,
+                seed: img.meta.seed,
+                sampler: img.meta.sampler,
+                steps: img.meta.steps,
+                denoise: hasValue(img.meta.denoise) ? img.meta.denoise : null,
+                prompt: sharedPrompt.trim() || img.meta.prompt || ''
+            }));
+        }
+
+        function copyTop3Info() {
+            const rows = getTop3Report();
+            if (!rows.length) return;
+            const blocks = rows.map(r => {
+                const lines = [
+                    `#${r.rank} — ${r.filename}`,
+                    `  Filename:     ${r.filename}`,
+                    `  Rank Score:   ${r.score}`,
+                    `  Model:        ${r.model}`,
+                    `  Seed:         ${r.seed}`,
+                    `  Sampler:      ${r.sampler}`,
+                    `  Steps:        ${r.steps}`
+                ];
+                if (r.denoise !== null) lines.push(`  Denoise:      ${r.denoise}`);
+                lines.push(`  Input Prompt: ${r.prompt || '—'}`);
+                return lines.join('\n');
+            });
+            copyText(`ComfyUI Top-3 Selected Images\n\n${blocks.join('\n\n')}`, 'Copied Top-3 info to clipboard!');
+        }
+
+        function buildTop3Markdown() {
+            const rows = getTop3Report();
+            const modeLabel = rankingMode === 'roundrobin' ? 'All pairwise comparisons (round-robin)' : 'Fast tournament sort (merge-sort)';
+            const lines = [
+                '# ComfyUI Top-3 Report',
+                '',
+                `- **Generated:** ${new Date().toLocaleString()}`,
+                `- **Batch:** ${images.length} images · ${voteHistory.length} comparisons · ${modeLabel}`,
+                ''
+            ];
+            rows.forEach(r => {
+                lines.push(`## #${r.rank} — ${r.filename}`, '');
+                lines.push(`- **Filename:** \`${r.filename}\``);
+                lines.push(`- **Rank Score:** ${r.score}`);
+                lines.push(`- **Model:** ${r.model}`);
+                lines.push(`- **Seed:** ${r.seed}`);
+                lines.push(`- **Sampler:** ${r.sampler}`);
+                lines.push(`- **Steps:** ${r.steps}`);
+                if (r.denoise !== null) lines.push(`- **Denoise:** ${r.denoise}`);
+                lines.push('- **Input Prompt:**', '');
+                if (r.prompt) r.prompt.split('\n').forEach(l => lines.push(`  > ${l}`));
+                else lines.push('  > _Not found in metadata_');
+                lines.push('');
+            });
+            return lines.join('\n');
+        }
+
+        function saveTop3Markdown() {
+            if (!images.length) return;
+            downloadFile('comfyui_top3_report.md', buildTop3Markdown(), 'text/markdown;charset=utf-8');
+            showToast('Saved comfyui_top3_report.md', 'success');
+        }
+
+        function saveTop3Csv() {
+            const rows = getTop3Report();
+            if (!rows.length) return;
+            const withDenoise = rows.some(r => r.denoise !== null);
+            const headers = ['Rank', 'Filename', 'Rank Score', 'Model', 'Seed', 'Sampler', 'Steps'];
+            if (withDenoise) headers.push('Denoise');
+            headers.push('Input Prompt');
+            const q = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
+            const body = rows.map(r => {
+                const cells = [r.rank, r.filename, r.score, r.model, r.seed, r.sampler, r.steps];
+                if (withDenoise) cells.push(r.denoise ?? '');
+                cells.push(r.prompt);
+                return cells.map(q).join(',');
+            });
+            downloadFile('comfyui_top3.csv', '﻿' + [headers.map(q).join(','), ...body].join('\r\n'), 'text/csv;charset=utf-8');
+            showToast('Saved comfyui_top3.csv', 'success');
+        }
+
+        function downloadFile(filename, content, mime) {
+            const blob = new Blob([content], { type: mime });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1500);
+        }
+
+        // --- MODEL PERFORMANCE (CURRENT BATCH) ---
+        // W-L only counts matches between images of DIFFERENT models, so same-model pairs don't inflate a model's score.
+        function computeModelBreakdown(ranked) {
+            const stats = {};
+            const byId = Object.fromEntries(images.map(i => [i.id, i]));
+            const n = ranked.length;
+            ranked.forEach((img, idx) => {
+                const m = img.meta.model || 'Not detected';
+                const s = stats[m] || (stats[m] = { model: m, images: 0, wins: 0, losses: 0, ties: 0, ranks: [], placementSum: 0, top3: 0, firsts: 0 });
+                s.images++;
+                s.ranks.push(idx + 1);
+                s.placementSum += n > 1 ? (n - 1 - idx) / (n - 1) : 1;
+                if (idx < 3) s.top3++;
+                if (idx === 0) s.firsts++;
+            });
+            effectiveVotes().forEach(v => {
+                const w = byId[v.winnerId], l = byId[v.loserId];
+                if (!w || !l) return;
+                const mw = w.meta.model || 'Not detected', ml = l.meta.model || 'Not detected';
+                if (mw === ml || !stats[mw] || !stats[ml]) return;
+                if (v.tie) { stats[mw].ties++; stats[ml].ties++; return; }
+                stats[mw].wins++;
+                stats[ml].losses++;
+            });
+            return Object.values(stats).map(s => ({
+                ...s,
+                bestRank: Math.min(...s.ranks),
+                avgRank: s.ranks.reduce((a, b) => a + b, 0) / s.ranks.length,
+                winRate: (s.wins + s.losses + s.ties) ? (s.wins + 0.5 * s.ties) / (s.wins + s.losses + s.ties) : null
+            })).sort((a, b) => a.avgRank - b.avgRank);
+        }
+
+        function statsTable(headers, rows) {
+            return `<table class="w-full text-xs font-mono">
+                <thead><tr class="text-[10px] uppercase tracking-wider text-gray-500 border-b border-comfy-border">
+                    ${headers.map((h, i) => `<th class="py-2 px-2 font-semibold whitespace-nowrap ${i === 0 ? 'text-left' : 'text-right'}">${h}</th>`).join('')}
+                </tr></thead>
+                <tbody>${rows.map((r, ri) => `<tr class="border-b border-comfy-border/60 last:border-0 ${ri === 0 ? 'text-white' : 'text-gray-300'}">
+                    ${r.map((c, i) => `<td class="py-2 px-2 ${i === 0 ? 'text-left break-words min-w-[140px]' : 'text-right whitespace-nowrap tabular-nums'}">${c}</td>`).join('')}
+                </tr>`).join('')}</tbody></table>`;
+        }
+
+        function renderModelBreakdown(ranked) {
+            const rows = computeModelBreakdown(ranked);
+            const promptSnippet = sharedPrompt.trim() ? `For prompt “${escapeHtml(sharedPrompt.trim().slice(0, 90))}${sharedPrompt.trim().length > 90 ? '…' : ''}”. ` : '';
+            const note = document.getElementById('modelBreakdownNote');
+            if (rows.length < 2) {
+                note.innerHTML = `${promptSnippet}Every image in this batch uses <span class="text-gray-200">${escapeHtml(rows[0] ? rows[0].model : '—')}</span>, so there's no model-vs-model result. Mix models in one batch to compare them.`;
+            } else {
+                note.innerHTML = `${promptSnippet}Sorted by average rank. W–L–T counts only matches between different models; a tie is worth half a win.`;
+            }
+            document.getElementById('modelBreakdownTable').innerHTML = statsTable(
+                ['Model', 'Images', 'Avg Rank', 'Best', 'Top-3', 'W–L–T', 'Win %'],
+                rows.map(r => [
+                    escapeHtml(r.model),
+                    r.images,
+                    r.avgRank.toFixed(1),
+                    `#${r.bestRank}`,
+                    r.top3,
+                    `${r.wins}–${r.losses}–${r.ties || 0}`,
+                    r.winRate === null ? '—' : `<span class="text-emerald-400">${Math.round(r.winRate * 100)}%</span>`
+                ])
+            );
+            updateLogButton();
+        }
+
+        // --- ALL-TIME MODEL LEADERBOARD (persisted in localStorage) ---
+        const LB_KEY = 'comfyRanker.modelLeaderboard.v1';
+        let lbClearArmed = false, lbClearTimer = null;
+
+        function loadLeaderboard() {
+            try {
+                const raw = localStorage.getItem(LB_KEY);
+                if (raw) {
+                    const d = JSON.parse(raw);
+                    if (d && d.models) return d;
+                }
+            } catch (e) { /* storage blocked or corrupt: start fresh */ }
+            return { batches: 0, comparisons: 0, models: {}, updated: null };
+        }
+
+        function saveLeaderboard(data) {
+            try { localStorage.setItem(LB_KEY, JSON.stringify(data)); return true; }
+            catch (e) { return false; }
+        }
+
+        function updateLogButton() {
+            const btn = document.getElementById('logBatchBtn');
+            if (!btn) return;
+            btn.disabled = currentRunLogged || !voteHistory.length;
+            btn.innerHTML = currentRunLogged
+                ? '<i class="fa-solid fa-check"></i> <span>Logged to Leaderboard</span>'
+                : '<i class="fa-solid fa-plus"></i> <span>Log Batch to Leaderboard</span>';
+        }
+
+        function logBatchToLeaderboard() {
+            if (currentRunLogged || !voteHistory.length) return;
+            const rows = computeModelBreakdown(getSortedRankedImages());
+            const data = loadLeaderboard();
+            data.batches++;
+            data.comparisons += voteHistory.length;
+            rows.forEach(r => {
+                const m = data.models[r.model] || (data.models[r.model] = { batches: 0, images: 0, wins: 0, losses: 0, ties: 0, top3: 0, firsts: 0, placementSum: 0 });
+                m.batches++;
+                m.images += r.images;
+                m.wins += r.wins;
+                m.losses += r.losses;
+                m.ties = (m.ties || 0) + r.ties;
+                m.top3 += r.top3;
+                m.firsts += r.firsts;
+                m.placementSum += r.placementSum;
+            });
+            data.updated = new Date().toISOString();
+            if (!saveLeaderboard(data)) {
+                showToast('Browser storage is blocked here, so the leaderboard could not be saved.', 'error');
+                return;
+            }
+            currentRunLogged = true;
+            persistState();
+            updateLogButton();
+            renderAllTimeLeaderboard();
+            showToast(rows.length < 2 ? 'Batch logged. Only one model was in it, so no model-vs-model W–L was added.' : 'Batch logged to the All-Time Model Leaderboard.', 'success');
+        }
+
+        function renderAllTimeLeaderboard() {
+            const data = loadLeaderboard();
+            const note = document.getElementById('allTimeNote');
+            const table = document.getElementById('allTimeTable');
+            const btn = document.getElementById('clearLeaderboardBtn');
+            if (!note || !table) return;
+            if (btn && !lbClearArmed) btn.innerHTML = '<i class="fa-solid fa-eraser"></i> <span>Clear Leaderboard</span>';
+            const models = Object.entries(data.models);
+            if (!models.length) {
+                note.textContent = 'Saved in this browser. Nothing logged yet. Finish a batch and click "Log Batch to Leaderboard".';
+                table.innerHTML = '<div class="py-8 text-center text-xs text-gray-500"><i class="fa-solid fa-ranking-star text-2xl opacity-40 mb-2 block"></i>No batches logged yet</div>';
+                return;
+            }
+            const when = data.updated ? new Date(data.updated).toLocaleString() : '—';
+            note.textContent = `Saved in this browser · ${data.batches} batch${data.batches === 1 ? '' : 'es'} · ${data.comparisons} comparisons · last logged ${when}. Placement = 100% if always ranked first, 0% if always last.`;
+            const rows = models.map(([name, m]) => ({
+                name, ...m,
+                placement: m.images ? m.placementSum / m.images : 0,
+                winRate: (m.wins + m.losses + (m.ties || 0)) ? (m.wins + 0.5 * (m.ties || 0)) / (m.wins + m.losses + (m.ties || 0)) : null
+            })).sort((a, b) => b.placement - a.placement || b.firsts - a.firsts);
+            table.innerHTML = statsTable(
+                ['Model', 'Batches', 'Images', 'Avg Placement', '#1s', 'Top-3', 'W–L–T', 'Win %'],
+                rows.map(r => [
+                    escapeHtml(r.name),
+                    r.batches,
+                    r.images,
+                    `<span class="text-emerald-400">${Math.round(r.placement * 100)}%</span>`,
+                    r.firsts,
+                    r.top3,
+                    `${r.wins}–${r.losses}–${r.ties || 0}`,
+                    r.winRate === null ? '—' : `${Math.round(r.winRate * 100)}%`
+                ])
+            );
+        }
+
+        function clearLeaderboard(btn) {
+            if (!Object.keys(loadLeaderboard().models).length) {
+                showToast('The leaderboard is already empty.', 'info');
+                return;
+            }
+            if (!lbClearArmed) {
+                lbClearArmed = true;
+                btn.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> <span>Click again to clear</span>';
+                lbClearTimer = setTimeout(() => { lbClearArmed = false; renderAllTimeLeaderboard(); }, 3500);
+                return;
+            }
+            clearTimeout(lbClearTimer);
+            lbClearArmed = false;
+            try { localStorage.removeItem(LB_KEY); } catch (e) { /* ignore */ }
+            currentRunLogged = false;
+            persistState();
+            updateLogButton();
+            renderAllTimeLeaderboard();
+            showToast('All-Time Model Leaderboard cleared.', 'info');
+        }
+
+        // --- SYNCHRONIZED LOUPE ZOOM & BLIND MODE ---
+        // Synchronized magnifier: the same image point (u, v in 0..1) is magnified on both images,
+        // measured on the drawn picture itself, so letterboxing and different image sizes don't throw it off.
+        const LOUPE_RADIUS = 110; // half of the 220px lens in .loupe-lens
+
+        function toggleSyncLoupe() {
+            syncLoupeEnabled = !syncLoupeEnabled;
+            if (!syncLoupeEnabled) hideLoupes();
+            syncToggleLabels();
+            persistState();
+        }
+
+        // Where the picture is actually drawn inside an object-fit: contain <img>
+        function drawnImageRect(img) {
+            const r = img.getBoundingClientRect();
+            const nw = img.naturalWidth, nh = img.naturalHeight;
+            if (!nw || !nh || !r.width || !r.height) return null;
+            const scale = Math.min(r.width / nw, r.height / nh);
+            const w = nw * scale, h = nh * scale;
+            return { left: r.left + (r.width - w) / 2, top: r.top + (r.height - h) / 2, width: w, height: h };
+        }
+
+        function handleLoupeMove(e, sourceSide) {
+            if (!syncLoupeEnabled) return;
+            const rect = drawnImageRect(document.getElementById(sourceSide + 'Img'));
+            if (!rect) return;
+            const u = (e.clientX - rect.left) / rect.width;
+            const v = (e.clientY - rect.top) / rect.height;
+            if (u < 0 || u > 1 || v < 0 || v > 1) { hideLoupes(); return; }
+            lastLoupeUV = { u, v };
+            placeLoupe('left', u, v);
+            placeLoupe('right', u, v);
+        }
+
+        function placeLoupe(side, u, v) {
+            const wrapper = document.getElementById(side + 'ImgWrapper');
+            const img = document.getElementById(side + 'Img');
+            const loupe = document.getElementById(side + 'Loupe');
+            const rect = img && drawnImageRect(img);
+            if (!wrapper || !loupe || !rect) return;
+
+            const wrap = wrapper.getBoundingClientRect();
+            const cx = rect.left - wrap.left + u * rect.width;
+            const cy = rect.top - wrap.top + v * rect.height;
+            const bw = rect.width * loupeZoom, bh = rect.height * loupeZoom;
+
+            loupe.style.display = 'block';
+            loupe.style.left = `${cx - LOUPE_RADIUS}px`;
+            loupe.style.top = `${cy - LOUPE_RADIUS}px`;
+            loupe.style.backgroundImage = `url("${img.src}")`;
+            loupe.style.backgroundSize = `${bw}px ${bh}px`;
+            loupe.style.backgroundPosition = `${LOUPE_RADIUS - u * bw}px ${LOUPE_RADIUS - v * bh}px`;
+            loupe.style.backgroundColor = '#000';
+        }
+
+        function hideLoupes() {
+            document.getElementById('leftLoupe').style.display = 'none';
+            document.getElementById('rightLoupe').style.display = 'none';
+        }
+
+        function toggleBlindMode() {
+            showMetaDuringVote = !showMetaDuringVote;
+            syncToggleLabels();
+            persistState();
+            updateBlindVisibility();
+        }
+
+        // --- METADATA MODAL ---
+        function openMetadataModal(imgId) {
+            const img = images.find(i => i.id === imgId);
+            if (!img) return;
+            activeModalImageId = imgId;
+
+            document.getElementById('modalTitle').textContent = img.filename;
+            document.getElementById('modalImg').src = img.url;
+            document.getElementById('modalCopyFilenameBtn').onclick = () => copyText(img.filename, 'Copied filename!');
+
+            const m = img.meta;
+            const loraHtml = m.loras && m.loras.length > 0
+                ? m.loras.map(l => `<span class="inline-block px-2 py-0.5 rounded bg-purple-500/15 border border-purple-500/30 text-purple-300 mr-1 mb-1">${escapeHtml(l)}</span>`).join('')
+                : '<span class="text-gray-500">None detected</span>';
+
+            document.getElementById('modalStructuredSpecs').innerHTML = `
+                <div class="flex justify-between border-b border-comfy-border pb-1.5"><span class="text-gray-400">Filename:</span> <span class="text-white font-semibold">${escapeHtml(img.filename)}</span></div>
+                <div class="flex justify-between border-b border-comfy-border pb-1.5"><span class="text-gray-400">Resolution:</span> <span class="text-gray-200">${escapeHtml(m.resolution)}</span></div>
+                <div class="flex justify-between border-b border-comfy-border pb-1.5"><span class="text-gray-400">Diffusion Model / UNet:</span> <span class="text-comfy-blue">${escapeHtml(m.model)}</span></div>
+                <div class="flex justify-between border-b border-comfy-border pb-1.5"><span class="text-gray-400">Seed:</span> <span class="text-amber-400">${escapeHtml(m.seed)}</span></div>
+                <div class="flex justify-between border-b border-comfy-border pb-1.5"><span class="text-gray-400">Steps / CFG:</span> <span class="text-gray-200">${escapeHtml(m.steps)} steps @ CFG ${escapeHtml(m.cfg)}</span></div>
+                <div class="flex justify-between border-b border-comfy-border pb-1.5"><span class="text-gray-400">Sampler / Scheduler:</span> <span class="text-gray-200">${escapeHtml(m.sampler)} / ${escapeHtml(m.scheduler)} (denoise ${escapeHtml(m.denoise)})</span></div>
+                <div class="flex justify-between border-b border-comfy-border pb-1.5"><span class="text-gray-400">Image Noise Aug:</span> <span class="text-emerald-400">${m.noiseAugStrength !== null ? `Strength ${m.noiseAugStrength} (Seed: ${m.noiseAugSeed || '—'})` : '—'}</span></div>
+                <div class="pt-1"><div class="text-gray-400 mb-1">Active LoRAs (Power Lora Loader):</div><div>${loraHtml}</div></div>
+                <div class="pt-1 border-t border-comfy-border"><div class="text-gray-400 mb-1 mt-1.5">Input Prompt:</div><div class="text-gray-200 whitespace-pre-wrap break-words max-h-32 overflow-y-auto">${m.prompt ? escapeHtml(m.prompt) : '<span class="text-gray-500">Not found</span>'}</div></div>
+            `;
+
+            const rawEl = document.getElementById('modalRawJson');
+            if (m.rawPromptJson) {
+                try {
+                    rawEl.textContent = JSON.stringify(JSON.parse(m.rawPromptJson.replace(/\bNaN\b/g, 'null')), null, 2);
+                } catch {
+                    rawEl.textContent = m.rawPromptJson;
+                }
+            } else {
+                rawEl.textContent = 'No embedded PNG tEXt/iTXt ComfyUI workflow chunk found in this file.';
+            }
+
+            const modal = document.getElementById('metadataModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeMetadataModal() {
+            const modal = document.getElementById('metadataModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function copyRawModalJson() {
+            const text = document.getElementById('modalRawJson').textContent;
+            copyText(text, 'Copied raw metadata JSON!');
+        }
+
+        // --- VIEW NAVIGATION ---
+        function switchView(viewName) {
+            currentView = viewName;
+            document.getElementById('viewGallery').classList.toggle('hidden', viewName !== 'gallery');
+            document.getElementById('viewCompare').classList.toggle('hidden', viewName !== 'compare');
+            document.getElementById('viewResults').classList.toggle('hidden', viewName !== 'results');
+
+            const navIds = { gallery: 'navGalleryBtn', compare: 'navCompareBtn', results: 'navResultsBtn' };
+            for (const [key, btnId] of Object.entries(navIds)) {
+                const btn = document.getElementById(btnId);
+                if (btn.disabled) continue;
+                if (key === viewName) {
+                    btn.className = 'px-3 py-1.5 rounded-md transition flex items-center gap-1.5 bg-comfy-card text-white shadow cursor-pointer';
+                } else {
+                    btn.className = 'px-3 py-1.5 rounded-md transition flex items-center gap-1.5 text-gray-400 hover:text-white cursor-pointer';
+                }
+            }
+            if (viewName !== 'compare') { hideLoupes(); peekingSpecs = false; }
+            persistState();
+        }
+
+        // --- DEMO SAMPLE BATCH GENERATOR (matching the user's ComfyUI Pixaroma workflow) ---
+        function loadDemoBatch() {
+            const sampleConfigs = [
+                { hash: '3f77b4ff3ecc4effbb01357e7dcb65d9', noise: 0.012, augSeed: '833014631622101', hue: 205, accent: '#38bdf8', label: 'Variant A • Crisp Rim Light' },
+                { hash: '3e46d8254e864eb6854982b1d0c21673', noise: 0.016, augSeed: '833014631622147', hue: 212, accent: '#60a5fa', label: 'Variant B • Balanced Detail' },
+                { hash: '1e436f1c336f45e8a6af5ad9e66c4f84', noise: 0.020, augSeed: '833014631622189', hue: 198, accent: '#2dd4bf', label: 'Variant C • High Contrast Sky' },
+                { hash: '925bb3e0e9084bcc8bcc39eeeb8ba00b', noise: 0.014, augSeed: '833014631622215', hue: 220, accent: '#818cf8', label: 'Variant D • Soft Atmospheric' },
+                { hash: '4b29f4ff114c42aead76b56e846296e0', noise: 0.018, augSeed: '833014631622264', hue: 208, accent: '#3b82f6', label: 'Variant E • Enhanced Texture' },
+                { hash: '48faec7c847e44e78fb04e222594cc3f', noise: 0.022, augSeed: '833014631622302', hue: 195, accent: '#06b6d4', label: 'Variant F • Strong Film Grain' }
+            ];
+
+            // Two models in the sample so the Model Performance Breakdown has something to compare
+            const sampleModels = ['krea2\\gonzalomoKrea2_v40.safetensors', 'flux\\flux1-krea-dev_fp8.safetensors'];
+            const samplePrompt = 'cinematic photo of a woman in a blue dress and white jacket standing on a rocky coastline before a giant stone halo monolith, golden hour rim light, fine film grain';
+
+            sampleConfigs.forEach((cfg, index) => {
+                const unetName = sampleModels[index % 2];
+                const canvas = document.createElement('canvas');
+                canvas.width = 768;
+                canvas.height = 1024;
+                const ctx = canvas.getContext('2d');
+
+                // Draw stylized sci-fi monolith coastal scene variation
+                const skyGrad = ctx.createLinearGradient(0, 0, 0, 1024);
+                skyGrad.addColorStop(0, `hsl(${cfg.hue}, 45%, 18%)`);
+                skyGrad.addColorStop(0.55, `hsl(${cfg.hue - 10}, 55%, 65%)`);
+                skyGrad.addColorStop(1, `hsl(${cfg.hue + 5}, 35%, 12%)`);
+                ctx.fillStyle = skyGrad;
+                ctx.fillRect(0, 0, 768, 1024);
+
+                // Giant Halo Ring in background
+                ctx.save();
+                ctx.translate(384, 340);
+                ctx.strokeStyle = `hsla(${cfg.hue}, 30%, 25%, 0.85)`;
+                ctx.lineWidth = 48 + index * 3;
+                ctx.beginPath();
+                ctx.arc(0, 0, 220, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // Sunburst highlight
+                const ringGlow = ctx.createRadialGradient(0, -160, 10, 0, -160, 140);
+                ringGlow.addColorStop(0, 'rgba(255,255,255,0.95)');
+                ringGlow.addColorStop(1, 'rgba(255,255,255,0)');
+                ctx.fillStyle = ringGlow;
+                ctx.beginPath();
+                ctx.arc(0, -160, 140, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+
+                // Coastal waves & rocks
+                ctx.fillStyle = `hsl(${cfg.hue}, 50%, 22%)`;
+                ctx.fillRect(0, 620, 768, 404);
+
+                // Character silhouette in blue dress & white jacket
+                ctx.fillStyle = '#0f172a';
+                ctx.beginPath();
+                ctx.arc(390, 230, 32, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Dress & Jacket variation
+                ctx.fillStyle = cfg.accent;
+                ctx.beginPath();
+                ctx.moveTo(350, 390);
+                ctx.lineTo(445, 390);
+                ctx.lineTo(485 + index * 6, 595);
+                ctx.lineTo(310 - index * 5, 575);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.fillStyle = '#f8fafc';
+                ctx.fillRect(352, 272, 82, 125);
+
+                // Overlay subtle watermark badge for quick visual differentiation
+                ctx.fillStyle = 'rgba(15, 23, 42, 0.78)';
+                ctx.fillRect(28, 910, 712, 82);
+                ctx.strokeStyle = cfg.accent;
+                ctx.lineWidth = 2;
+                ctx.strokeRect(28, 910, 712, 82);
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 24px Inter, sans-serif';
+                ctx.fillText(cfg.label, 48, 946);
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '18px JetBrains Mono, monospace';
+                ctx.fillText(`noise_aug: ${cfg.noise} | seed: 10490951487351 | er_sde`, 48, 976);
+
+                const dataUrl = canvas.toDataURL('image/png');
+                const filename = `pixaroma_preview_${cfg.hash}.png`;
+
+                const mockPrompt = {
+                    "1": { "class_type": "UNETLoader", "inputs": { "unet_name": unetName, "weight_dtype": "default" } },
+                    "2": { "class_type": "KSampler", "inputs": { "seed": 10490951487351, "steps": 12, "cfg": 1.0, "sampler_name": "er_sde", "scheduler": "simple", "denoise": 1.0, "positive": ["5", 0] } },
+                    "5": { "class_type": "CLIPTextEncode", "_meta": { "title": "Positive Prompt" }, "inputs": { "text": samplePrompt } },
+                    "3": { "class_type": "ImageNoiseAugmentation", "inputs": { "noise_aug_strength": cfg.noise, "seed": cfg.augSeed } },
+                    "4": {
+                        "class_type": "Power Lora Loader (rgthree)",
+                        "inputs": {
+                            "lora_1": { "on": true, "lora": "krea\\Detailer-KREA2.safetensors", "strength": 1.40 },
+                            "lora_2": { "on": true, "lora": "krea\\Purple_Grainy_KR2_V2_D.safetensors", "strength": 1.20 },
+                            "lora_3": { "on": true, "lora": "krea\\realism_engine_krea2_v3.1.safetensors", "strength": 0.80 }
+                        }
+                    }
+                };
+
+                const demoImg = {
+                    id: 'demo_' + Date.now() + '_' + index,
+                    seq: imageSeq++,
+                    filename,
+                    url: dataUrl,
+                    width: 768,
+                    height: 1024,
+                    size: 845120,
+                    meta: {
+                        model: cleanPathName(unetName),
+                        prompt: samplePrompt,
+                        seed: '10490951487351',
+                        steps: '12',
+                        cfg: '1.0',
+                        sampler: 'er_sde',
+                        scheduler: 'simple',
+                        denoise: '1.00',
+                        noiseAugSeed: cfg.augSeed,
+                        noiseAugStrength: cfg.noise,
+                        loras: [
+                            'Detailer-KREA2 (1.4)',
+                            'Purple_Grainy_KR2_V2_D (1.2)',
+                            'realism_engine_krea2_v3.1 (0.8)'
+                        ],
+                        resolution: '768 × 1024',
+                        rawPromptJson: JSON.stringify(mockPrompt, null, 2)
+                    },
+                    wins: 0,
+                    losses: 0,
+                    ties: 0,
+                    matches: 0,
+                    headToHead: {}
+                };
+                images.push(demoImg);
+                persistImage(demoImg, { dataUrl });
+            });
+
+            sharedPromptEdited = false;
+            resetRankingIfAny();
+            renderGallery();
+            updateComparisonEstimate();
+            persistState();
+            showToast('Loaded 6 sample ComfyUI variation images!', 'success');
+        }
+
+        // --- UTILITIES ---
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+        }
+
+        function copyText(text, message = 'Copied to clipboard!') {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text)
+                    .then(() => showToast(message, 'success'))
+                    .catch(() => legacyCopyText(text, message));
+                return;
+            }
+            legacyCopyText(text, message);
+        }
+
+        function legacyCopyText(text, message) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast(message, 'success');
+            } catch (err) {
+                showToast('Failed to copy text.', 'error');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const colors = {
+                success: 'bg-emerald-950/90 border-emerald-500/50 text-emerald-200',
+                error: 'bg-red-950/90 border-red-500/50 text-red-200',
+                info: 'bg-comfy-card/95 border-comfy-blue/50 text-gray-100'
+            };
+            const icons = {
+                success: 'fa-circle-check text-emerald-400',
+                error: 'fa-triangle-exclamation text-red-400',
+                info: 'fa-circle-info text-comfy-blue'
+            };
+
+            toast.className = `px-4 py-2.5 rounded-xl border shadow-xl text-xs sm:text-sm font-medium flex items-center gap-2.5 backdrop-blur transition-all duration-300 ${colors[type] || colors.info}`;
+            toast.innerHTML = `<i class="fa-solid ${icons[type] || icons.info}"></i><span>${escapeHtml(message)}</span>`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(8px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 2600);
+        }
+
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function escapeJs(str) {
+            if (!str) return '';
+            return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        }
+    </script>
+</body>
+</html>
