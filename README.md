@@ -3,6 +3,8 @@
 Rank a batch of image variations by comparing two at a time. Get your top 3, with their settings.
 One HTML file. Runs in your browser. Images are never uploaded. This tool was initially created to compare and rank images generated using ComfyUI.
 
+![Comparing two images, with specs shown while holding Space](screenshots/compare.png)
+
 ## Quick start
 
 1. Open `comfyui_pairwise_image_ranker.html` in Chrome, Edge or Firefox.
@@ -12,6 +14,8 @@ One HTML file. Runs in your browser. Images are never uploaded. This tool was in
 5. Click **Download results**. Click **Clear Gallery** for the next batch.
 
 No images handy? Click **Sample: AI batch** or **Sample: photos**.
+
+![Gallery with a loaded batch, batch type and ranking method](screenshots/gallery.png)
 
 ## Keys
 
@@ -58,11 +62,21 @@ No images handy? Click **Sample: AI batch** or **Sample: photos**.
 - **Zoom (M):** hover one image and the same spot is magnified on both.
 - **Focus (F):** fullscreen with just the images. **Esc** to leave.
 
+| Magnifier (M) | Focus mode (F) |
+|---|---|
+| ![Magnifier showing the same spot on both images](screenshots/magnifier.png) | ![Focus mode with only the two images](screenshots/focus.png) |
+
+![Light theme, Quick Top-3 with photos](screenshots/compare-light-quick.png)
+
 ## Results
 
 - **Rank score:** `#1 (4W - 1L - 1T, 75%)`. A tie counts as half a win.
 - **Shared ranks (`#3=`):** images on equal points share a rank. If a shared rank crosses the top-3 cut, a note names the tied images. Pick whichever you prefer.
 - **Prompt (Generative):** one box if every image has the same prompt, otherwise each card shows its own. All are editable; edits go into the exports.
+
+| Generative | Photography |
+|---|---|
+| ![Results for a generative batch with model performance](screenshots/results-generative.png) | ![Results for a photo batch with camera data](screenshots/results-photography.png) |
 
 ## Download results
 
@@ -73,6 +87,8 @@ Click **Download results** and tick what you want:
 - **Complete zip:** puts everything ticked into one `.zip`.
 
 The browser can't delete your other files; do that yourself.
+
+![Download results dialog](screenshots/download.png)
 
 ## Comparing models (Generative only)
 
