@@ -7,72 +7,96 @@ One HTML file. Runs in your browser. Images are never uploaded. This tool was in
 
 1. Open `comfyui_pairwise_image_ranker.html` in Chrome, Edge or Firefox.
 2. Drop your images on the drop zone.
-3. Click **Start Comparison Rounds**.
+3. Pick a ranking method, then click **Start ranking**.
 4. Pick the better image each round: click it, or press **←** / **→**. Too close? Press **↓** for a tie.
-5. Read your top 3. Export. Click **Clear Gallery** for the next batch.
+5. Click **Download results**. Click **Clear Gallery** for the next batch.
 
-No images handy? Click **Load Sample Batch**.
+No images handy? Click **Sample: AI batch** or **Sample: photos**.
 
 ## Keys
 
 | Key | Does |
 |---|---|
 | **←** / **→** | Pick left / right |
-| **↓** | Tie (each image gets half a point) |
-| **M** | Magnifier on/off |
-| Mouse wheel over an image | Magnifier zoom (while it's on) |
-| **Space** (hold) | Peek at specs while in Blind Mode |
-| **Ctrl+Z** / **⌘Z** | Undo last pick |
-| **Esc** | Close the inspector |
+| **↓** | Tie (each image gets half a point; not in Quick Top-3) |
+| **Space** (hold) | Peek at specs while in Blind mode |
+| **M** | Magnifier on/off (mouse wheel over an image = zoom) |
+| **F** | Focus mode: only the two images |
+| **Z** or **Ctrl+Z** / **⌘Z** | Undo last pick |
+| **I** | Show the shortcuts |
+| **Esc** | Close a dialog, or leave Focus mode |
 
-## Modes
+## Batch types
 
-| Mode | Use when |
-|---|---|
-| **Round-Robin** (default) | 5–10 images. Every pair once. Most reliable. |
-| **Fast Tournament Sort** | 10+ images. Fewer clicks. Every image gets its own rank (no shared ranks). |
+| Type | Shows | Picked automatically when |
+|---|---|---|
+| **Generative** | Model, seed, steps, CFG, sampler, denoise, LoRAs, prompt | Any image has ComfyUI or A1111 settings |
+| **Photography** | Camera, lens, shutter, aperture, ISO, focal length, date taken | Otherwise |
 
-## During voting
+- Switch with **Batch type** in the gallery: **Auto**, **Generative** or **Photography**.
+- Only fields an image actually has are shown. Every image gets filename and resolution.
 
-- **Blind Mode** is on by default: filenames, models and settings are hidden. Hold **Space** to peek. Settings are context only; they never affect the ranking.
-- **Magnifier:** hover one image and the same spot is magnified on both. Scroll to zoom from 1.5× to 12×.
-- **Layout:** Side-by-Side for portrait. Stacked for landscape and ultra-wide.
-- **Sizing:** Fill Card Width = biggest image. Fit Screen Height = no scrolling.
+## Ranking methods
+
+| Method | Rounds for 6 / 10 / 20 images | Use when |
+|---|---|---|
+| **Thorough** (default) | 15 / 45 / 190 | You want the most reliable full ranking. |
+| **Fast** | ~11 / ~25 / ~68 | Big batches. Full ranking, fewer rounds. |
+| **Quick Top-3** (experimental) | ~9 / ~15 / ~27 | You only need the best 3. |
+
+**Quick Top-3** runs knockout rounds to find #1, then replays only the images #1 beat to find #2, and the same again for #3.
+- Trade-off: one misclick can knock out a strong image.
+- No ties.
+- Images outside the top 3 aren't ranked.
+
+## During ranking
+
+- **Thin line at the top** = progress.
+- **Blind** is on by default: filenames and settings are hidden. Hold **Space** to peek. Settings never affect the ranking.
+- **Fit** keeps both images in the window. **Fill width** makes them bigger (the page scrolls).
+- **Side by side** suits portrait images. **Stacked** suits wide ones.
+- **Zoom (M):** hover one image and the same spot is magnified on both.
+- **Focus (F):** fullscreen with just the images. **Esc** to leave.
 
 ## Results
 
-- **Rank Score:** `#1 (4W - 1L - 1T, 75%)`. A tie counts as half a win.
-- **Shared ranks (`#3=`):** images on equal points share a rank. Their head-to-head result separates them if there is one.
-  - Circular picks (A beat B, B beat C, C beat A) stay level, since you rated them equally. Nothing asks you to redo them.
-  - If a shared rank crosses the top-3 cut, a note names the tied images. Pick whichever you prefer.
-- **Top-3 cards:** Filename, Rank Score, Model, Seed, Sampler, Steps, Denoise (if present), Input Prompt.
-- **Shared Input Prompt:** read from the PNGs. Editable. Your edit goes into every export.
-- **Exports:**
-  - **Copy Top-3 Info** puts plain text on your clipboard.
-  - **Save Top-3 Report** saves `comfyui_top3_report.md`.
-  - **Save Top-3 (.csv)** saves `comfyui_top3.csv`.
+- **Rank score:** `#1 (4W - 1L - 1T, 75%)`. A tie counts as half a win.
+- **Shared ranks (`#3=`):** images on equal points share a rank. If a shared rank crosses the top-3 cut, a note names the tied images. Pick whichever you prefer.
+- **Prompt (Generative):** one box if every image has the same prompt, otherwise each card shows its own. All are editable; edits go into the exports.
 
-## Comparing models
+## Download results
+
+Click **Download results** and tick what you want:
+
+- **Top-3 images:** the original files, untouched (metadata kept). Optional rank prefix `1_`, `2_`, `3_`.
+- **Report (.md)** and **Report (.csv)**.
+- **Complete zip:** puts everything ticked into one `.zip`.
+
+The browser can't delete your other files; do that yourself.
+
+## Comparing models (Generative only)
 
 Put several models in one batch, using the same prompt.
 
-- **Model Performance Breakdown:** how each model did in this batch. W–L–T counts only matches against *other* models.
-- **Log Batch to Leaderboard:** adds the batch to the **All-Time Model Leaderboard**. One log per run.
-- **Clear Leaderboard:** click twice to wipe it.
+- **Model performance:** how each model did in this batch. W–L–T counts only matches against *other* models.
+- **Log batch to leaderboard:** adds the batch to the **All-time model leaderboard**. One log per run.
+- **Save** downloads the leaderboard as `.json`.
+- **Load** opens a saved `.json`, then you choose **Merge with current** or **Replace current**.
+- **Clear:** click twice to wipe it.
 
 ## Saved automatically
 
-- **Your batch and progress survive a refresh.** Reopen the file and you're back on the same round or results.
-  - This covers images, picks, ties, the prompt edit and view settings.
+- **Your batch and progress survive a refresh.** This covers images, picks, prompt edits and view settings.
 - **Clear Gallery** deletes the saved batch.
-- **The leaderboard** is saved too, and persists until you clear it.
+- The leaderboard is saved until you clear it.
 - Saving is per browser. A different browser or a private window starts empty.
 
-## Image Metadata
+## Metadata
 
-Read from **PNG** files saved by ComfyUI: model, seed, steps, CFG, sampler, scheduler, denoise, LoRAs, noise aug and prompt. A1111/Forge PNGs work too.
+- **Generative:** read from PNGs saved by ComfyUI or A1111/Forge.
+- **Photography:** EXIF read from JPEG, PNG and WebP.
 
-Shows **"Not detected"** or **"—"**? The file is a WebP or JPEG, or it was re-saved or sent through a chat app (that strips metadata). Use the original from ComfyUI's output folder.
+Fields missing? The file was likely re-saved or sent through a chat app, which strips metadata. Use the original file.
 
 ## Troubleshooting
 
@@ -80,6 +104,8 @@ Shows **"Not detected"** or **"—"**? The file is a WebP or JPEG, or it was re-
 |---|---|
 | Arrow keys don't vote | Click an empty spot on the page first. |
 | Added or removed an image mid-ranking | The ranking resets, since the batch changed. Start again. |
-| Prompt is wrong or empty | Type it into the Shared Input Prompt box. |
+| Prompt is wrong or empty | Edit it on the results card. |
+| Focus mode isn't fullscreen | Your browser blocked fullscreen. Focus mode still hides everything else. |
+| Several downloads, browser asks to allow them | Click Allow, or tick **Complete zip** for a single file. |
 | No icons | You're offline. Everything else still works. |
 | "Could not save this batch" message | Browser storage is full or blocked. Ranking still works; it just won't survive a refresh. |
